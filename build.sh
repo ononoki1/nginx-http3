@@ -1,9 +1,11 @@
+set -e
+apt-get update
+apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy cmake dpkg-dev git golang libunwind-dev mercurial rsync wget unzip uuid-dev
 wget -O /etc/apt/trusted.gpg.d/nginx_signing.asc https://nginx.org/keys/nginx_signing.key
 echo -e 'deb https://nginx.org/packages/mainline/debian bullseye nginx\ndeb-src https://nginx.org/packages/mainline/debian bullseye nginx' >> /etc/apt/sources.list
 echo -e 'Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900' > /etc/apt/preferences.d/99nginx
 apt-get update
 apt-get build-dep --allow-change-held-packages --allow-downgrades --allow-remove-essential -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy nginx
-apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy cmake dpkg-dev git golang libunwind-dev mercurial rsync unzip uuid-dev
 cd /github/home
 apt-get source nginx
 mv nginx-* nginx

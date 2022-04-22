@@ -1,3 +1,3 @@
-FROM debian
-COPY entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["bash", "/entrypoint.sh"]
+FROM debian:bullseye
+COPY build.sh /build.sh
+ENTRYPOINT ["bash", "/build.sh"]

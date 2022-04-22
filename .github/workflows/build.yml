@@ -5,9 +5,14 @@ on:
     branches: [main]
   workflow_dispatch:
 jobs:
-  nginx-build:
+  build:
     runs-on: ubuntu-latest
     name: NGINX build
     steps:
       - name: NGINX build
         uses: ./
+      - name: Upload build
+        uses: actions/upload-artifact@v3.0.0
+        with:
+          name: nginx.deb
+          path: nginx.deb

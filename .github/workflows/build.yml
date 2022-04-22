@@ -14,10 +14,8 @@ jobs:
         uses: actions/checkout@v3
       - name: Build
         uses: ./
-      - name: Add hash
-        run: |
-          cd /home/runner/work/_temp/_github_home
-          echo "hash=$(md5sum nginx.deb | awk '{print $1}')" >> $GITHUB_ENV
+      - name: Hash
+        run: echo "hash=${$(md5sum /home/runner/work/_temp/_github_home/nginx.deb | awk '{print $1}'):0:7}" >> $GITHUB_ENV
       - name: Upload
         uses: actions/upload-artifact@v3.0.0
         with:

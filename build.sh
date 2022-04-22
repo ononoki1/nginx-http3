@@ -4,6 +4,7 @@ echo -e 'Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 
 apt-get update
 apt-get build-dep --allow-change-held-packages --allow-downgrades --allow-remove-essential -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy nginx
 apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy cmake dpkg-dev git golang libunwind-dev mercurial rsync unzip uuid-dev
+cd /github/home
 apt-get source nginx
 mv nginx-* nginx
 hg clone -b quic https://hg.nginx.org/nginx-quic

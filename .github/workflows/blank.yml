@@ -1,0 +1,20 @@
+on:
+  schedule:
+  - cron: '0 0 * * *'
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: A job to say hello
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Hello world action step
+        uses: ./
+        id: hello
+        with:
+          who-to-greet: 'Mona the Octocat'
+      - name: Get the output time
+        run: echo "The time was ${{ steps.hello.outputs.time }}"

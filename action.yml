@@ -1,14 +1,4 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
-inputs:
-  who-to-greet:
-    description: 'Who to greet'
-    required: true
-outputs:
-  time:
-    description: 'The time we greeted you'
+name: NGINX build
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  args:
-    - ${{ inputs.who-to-greet }}
+  using: docker
+  image: Dockerfile

@@ -23,9 +23,10 @@ cmake ..
 make -j$(nproc)
 cd ../..
 git clone --recursive https://github.com/google/ngx_brotli
+git clone https://github.com/openresty/headers-more-nginx-module
 cd ..
 sed -i 's/CFLAGS=""/CFLAGS="-Wno-ignored-qualifiers"/g' rules
-sed -i 's/--sbin-path=\/usr\/sbin\/nginx/--sbin-path=\/usr\/sbin\/nginx --add-module="$(CURDIR)\/debian\/modules\/ngx_brotli"/g' rules
+sed -i 's/--sbin-path=\/usr\/sbin\/nginx/--sbin-path=\/usr\/sbin\/nginx --add-module="$(CURDIR)\/debian\/modules\/ngx_brotli --add-module="$(CURDIR)\/debian\/modules\/headers-more-nginx-module"/g' rules
 sed -i 's/--with-cc-opt="$(CFLAGS)" --with-ld-opt="$(LDFLAGS)"/--with-http_v3_module --with-stream_quic_module --with-cc-opt="-I..\/modules\/boringssl\/include $(CFLAGS)" --with-ld-opt="-L..\/modules\/boringssl\/build\/ssl -L..\/modules\/boringssl\/build\/crypto $(LDFLAGS)"/g' rules
 cd ..
 dpkg-buildpackage -b

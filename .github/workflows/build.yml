@@ -17,7 +17,7 @@ jobs:
       - name: Add hash
         run: |
           cd /home/runner/work/_temp/_github_home
-          hash=$(md5sum nginx.deb | awk '{print $1}')
+          export hash=$(md5sum nginx.deb | awk '{print $1}')
           mv nginx.deb nginx-$hash.deb
       - name: Upload
         uses: actions/upload-artifact@v3.0.0

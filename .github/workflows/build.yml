@@ -10,11 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     name: NGINX build
     steps:
+      - name: Checkout
       - uses: actions/checkout@v3
-      - name: NGINX build
+      - name: Build
         uses: ./
-      - name: Upload build
+      - name: Add hash
+        run: |
+          cd /home/runner/work/_temp/_github_home
+          hash=$(md5sum nginx.deb | awk '{print $1}')
+          mv nginx.deb nginx-$hash.deb
+      - name: Upload
         uses: actions/upload-artifact@v3.0.0
         with:
-          name: nginx-${{ github.sha }}.deb
-          path: /home/runner/work/_temp/_github_home/nginx.deb
+          name: nginx-${{ env.hash }}.deb
+          path: /home/runner/work/_temp/_github_home/nginx-${{ env.hash }}.deb

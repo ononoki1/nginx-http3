@@ -1,4 +1,4 @@
-name: NGINX build
+name: build
 runs:
   using: docker
   image: Dockerfile

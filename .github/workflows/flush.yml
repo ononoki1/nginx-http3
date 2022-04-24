@@ -5,9 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Generate
-        run: dd if=/dev/random of=/tmp/flush bs=1M count=10240
+        run: dd if=/dev/random of=/tmp/flush bs=512K count=20479
       - name: Cache
         uses: actions/cache@v3
         with:
           path: /tmp/flush
-          key: ${{ github.run_id }}-${{ github.run_attempt }}
+          key: ${{ github.run_id }}

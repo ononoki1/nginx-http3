@@ -39,5 +39,10 @@ dpkg-buildpackage -b > /dev/null 2>&1
 cd ..
 mv nginx_*.deb nginx.deb
 hash=$(sha256sum nginx.deb | awk '{print $1}')
-echo -e "hash=$hash\nhash_old=$(cat /github/workspace/hash)" >> $GITHUB_ENV
 echo "$hash" > /github/workspace/hash
+version=$(cat /github/workspace/version)
+if [[ $hash != $(cat /github/workspace/hash) ]]; then
+  version="$(($(cat /github/workspace/version)+1))"
+fi
+echo "$version" > /github/workspace/version
+echo -e "hash=$hash\nversion=$version" >> $GITHUB_ENV

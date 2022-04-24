@@ -31,3 +31,4 @@ jobs:
         with:
           files: /home/runner/work/_temp/_github_home/nginx.deb
           tag_name: ${{ env.hash }}
+          generate_release_notes: false

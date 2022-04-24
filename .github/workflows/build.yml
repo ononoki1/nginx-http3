@@ -2,7 +2,7 @@ name: build
 on:
   schedule:
   - cron: '0 * * * *'
-  pull_request:
+  push:
     branches: [ main ]
   workflow_dispatch:
 jobs:
@@ -19,13 +19,13 @@ jobs:
         with:
           name: v1.0.0.${{ env.version }}
           path: /home/runner/work/_temp/_github_home/nginx.deb
-      - name: Hash
-        id: hash
+      - name: Update
+        id: update
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Update hash and version
       - name: Release
-        if: steps.hash.outputs.changes_detected
+        if: steps.update.outputs.changes_detected
         uses: softprops/action-gh-release@v1
         with:
           files: /home/runner/work/_temp/_github_home/nginx.deb

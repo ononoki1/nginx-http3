@@ -15,17 +15,18 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v3.0.0
         with:
-          name: ${{ env.hash }}
+          name: ${{ env.version }}
           path: /home/runner/work/_temp/_github_home/nginx.deb
       - name: Hash
         id: hash
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: Update hash
+          commit_message: Update hash and version
       - name: Release
         if: steps.hash.outputs.changes_detected
         uses: softprops/action-gh-release@v1
         with:
           files: /home/runner/work/_temp/_github_home/nginx.deb
-          tag_name: ${{ env.hash }}
+          body: ${{ env.hash }}
+          tag_name: ${{ env.version }}
           generate_release_notes: false

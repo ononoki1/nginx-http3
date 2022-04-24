@@ -38,5 +38,5 @@ cd ..
 dpkg-buildpackage -b > /dev/null 2>&1
 cd ..
 mv nginx_*.deb nginx.deb
-hash=$(sha256sum nginx.deb | awk '{print $1}')
+hash=$(shasum nginx.deb | awk '{print $1}')
 echo "hash=${hash:0:7}" >> $GITHUB_ENV

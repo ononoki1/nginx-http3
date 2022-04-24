@@ -4,8 +4,10 @@ jobs:
   flush:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/cache@v3
+      - name: Generate
+        run: dd if=/dev/random of=/tmp/flush bs=1M count=10000
+      - name: Cache
+        uses: actions/cache@v3
         with:
           path: /tmp/flush
           key: ${{ github.run_id }}-${{ github.run_attempt }}
-      - run: dd if=/dev/random of=/tmp/flush bs=1M count=10000

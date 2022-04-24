@@ -20,12 +20,11 @@ jobs:
           name: v1.0.${{ env.version }}
           path: /home/runner/work/_temp/_github_home/nginx.deb
       - name: Update
-        id: update
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Update hash and version
       - name: Release
-        if: steps.update.outputs.changes_detected
+        if: ${{ env.change }}
         uses: softprops/action-gh-release@v1
         with:
           files: /home/runner/work/_temp/_github_home/nginx.deb

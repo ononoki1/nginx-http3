@@ -42,7 +42,8 @@ hash=$(sha256sum nginx.deb | awk '{print $1}')
 version=$(cat /github/workspace/version)
 if [[ $hash != $(cat /github/workspace/hash) ]]; then
   version="$(($(cat /github/workspace/version)+1))"
+  change=1
 fi
 echo "$hash" > /github/workspace/hash
 echo "$version" > /github/workspace/version
-echo -e "hash=$hash\nversion=$version" >> $GITHUB_ENV
+echo -e "hash=$hash\nversion=$version\nchange=$change" >> $GITHUB_ENV

@@ -29,6 +29,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: /home/runner/work/_temp/_github_home/nginx.deb
-          body: ${{ env.hash }}
+          body: "SHA256: ${{ env.hash }}"
           tag_name: v1.0.0.${{ env.version }}
           generate_release_notes: false

@@ -2,8 +2,6 @@ name: build
 on:
   schedule:
   - cron: '0 * * * *'
-  push:
-    branches: [ main ]
   workflow_dispatch:
 jobs:
   build:
@@ -14,19 +12,17 @@ jobs:
         uses: actions/checkout@v3
       - name: Build
         uses: ./
-      - name: Cache
-        id: cache
-        uses: actions/cache@v3
-        with:
-          path: /home/runner/work/_temp/_github_home/nginx.deb
-          key: ${{ env.hash }}
       - name: Upload
         uses: actions/upload-artifact@v3.0.0
         with:
           name: ${{ env.hash }}
           path: /home/runner/work/_temp/_github_home/nginx.deb
+      - name: Check
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update hash
       - name: Release
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.check.outputs.changes_detected
         uses: softprops/action-gh-release@v1
         with:
           files: /home/runner/work/_temp/_github_home/nginx.deb

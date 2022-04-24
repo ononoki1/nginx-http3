@@ -15,7 +15,7 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v3.0.0
         with:
-          name: ${{ env.version }}
+          name: v1.0.0.${{ env.version }}
           path: /home/runner/work/_temp/_github_home/nginx.deb
       - name: Hash
         id: hash
@@ -28,5 +28,5 @@ jobs:
         with:
           files: /home/runner/work/_temp/_github_home/nginx.deb
           body: ${{ env.hash }}
-          tag_name: ${{ env.version }}
+          tag_name: v1.0.0.${{ env.version }}
           generate_release_notes: false

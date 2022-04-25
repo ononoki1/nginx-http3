@@ -41,7 +41,7 @@ sed -i 's/CFLAGS=""/CFLAGS="-fstack-protector-strong -Wno-ignored-qualifiers -Wn
 sed -i 's/--sbin-path=\/usr\/sbin\/nginx/--sbin-path=\/usr\/sbin\/nginx --add-module=$(CURDIR)\/debian\/modules\/ngx_brotli --add-module=$(CURDIR)\/debian\/modules\/headers-more-nginx-module --add-module=$(CURDIR)\/debian\/modules\/zstd-nginx-module --add-module=$(CURDIR)\/debian\/modules\/ngx_waf/g' rules
 sed -i 's/--with-cc-opt="$(CFLAGS)" --with-ld-opt="$(LDFLAGS)"/--with-http_v3_module --with-stream_quic_module --with-zlib=$(CURDIR)\/debian\/modules\/zlib --with-cc-opt="-I..\/modules\/boringssl\/include $(CFLAGS)" --with-ld-opt="-ljemalloc -L..\/modules\/boringssl\/build\/ssl -L..\/modules\/boringssl\/build\/crypto $(LDFLAGS)"/g' rules
 cd ..
-dpkg-buildpackage -b > /dev/null 2>&1
+dpkg-buildpackage -b
 cd ..
 mv nginx_*.deb nginx.deb
 hash=$(sha256sum nginx.deb | awk '{print $1}')

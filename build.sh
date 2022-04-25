@@ -33,7 +33,6 @@ git clone https://github.com/openresty/headers-more-nginx-module > /dev/null 2>&
 git clone https://github.com/tokers/zstd-nginx-module > /dev/null 2>&1
 git clone -b current https://github.com/ADD-SP/ngx_waf > /dev/null 2>&1
 cd ngx_waf
-mkdir lib
 git clone https://github.com/DaveGamble/cJSON lib/cjson > /dev/null 2>&1
 git clone https://github.com/troydhanson/uthash lib/uthash > /dev/null 2>&1
 cd ..

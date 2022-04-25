@@ -1,6 +1,6 @@
 set -e
 cd /github/home
-echo 'Install dependencies.'
+echo Install dependencies.
 apt-get update > /dev/null 2>&1
 apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy cmake dpkg-dev git golang libunwind-dev mercurial rsync wget unzip uuid-dev > /dev/null 2>&1
 wget -qO /etc/apt/trusted.gpg.d/nginx_signing.asc https://nginx.org/keys/nginx_signing.key
@@ -8,28 +8,28 @@ echo -e 'deb https://nginx.org/packages/mainline/debian bullseye nginx\ndeb-src 
 echo -e 'Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900' > /etc/apt/preferences.d/99nginx
 apt-get update > /dev/null 2>&1
 apt-get build-dep --allow-change-held-packages --allow-downgrades --allow-remove-essential -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy nginx > /dev/null 2>&1
-echo 'Fetch nginx and nginx-quic source code.'
+echo Fetch nginx and nginx-quic source code.
 apt-get source nginx > /dev/null 2>&1
 mv nginx-* nginx
 hg clone -b quic https://hg.nginx.org/nginx-quic > /dev/null 2>&1
 rsync -r nginx-quic/ nginx > /dev/null 2>&1
-echo 'Fetch boringssl source code.'
+echo Fetch boringssl source code.
 cd nginx
 wget -q https://raw.githubusercontent.com/kn007/patch/master/Enable_BoringSSL_OCSP.patch
 patch -p1 < Enable_BoringSSL_OCSP.patch > /dev/null 2>&1
 mkdir debian/modules
 cd debian/modules
 git clone https://github.com/google/boringssl > /dev/null 2>&1
-echo 'Build boringssl.'
+echo Build boringssl.
 mkdir boringssl/build
 cd boringssl/build
 cmake .. > /dev/null 2>&1
 make -j$(nproc) > /dev/null 2>&1
-echo 'Fetch ngx_brotli and ngx_headers_more source code.'
+echo Fetch ngx_brotli and ngx_headers_more source code.
 cd ../..
 git clone --recursive https://github.com/google/ngx_brotli > /dev/null 2>&1
 git clone https://github.com/openresty/headers-more-nginx-module > /dev/null 2>&1
-echo 'Build target.'
+echo Build target.
 cd ..
 sed -i 's/CFLAGS=""/CFLAGS="-Wno-ignored-qualifiers"/g' rules
 sed -i 's/--sbin-path=\/usr\/sbin\/nginx/--sbin-path=\/usr\/sbin\/nginx --add-module="$(CURDIR)\/debian\/modules\/ngx_brotli" --add-module="$(CURDIR)\/debian\/modules\/headers-more-nginx-module"/g' rules
@@ -41,9 +41,12 @@ mv nginx_*.deb nginx.deb
 hash=$(sha256sum nginx.deb | awk '{print $1}')
 version=$(cat /github/workspace/version)
 if [[ $hash != $(cat /github/workspace/hash) ]]; then
-  version="$(($(cat /github/workspace/version)+1))"
+  version=$(($(cat /github/workspace/version)+1))
   change=1
+  echo This is a new version.
+else
+  echo This is an old version.
 fi
-echo "$hash" > /github/workspace/hash
-echo "$version" > /github/workspace/version
+echo $hash > /github/workspace/hash
+echo $version > /github/workspace/version
 echo -e "hash=$hash\nversion=$version\nchange=$change" >> $GITHUB_ENV

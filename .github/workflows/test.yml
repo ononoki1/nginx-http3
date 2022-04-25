@@ -1,0 +1,19 @@
+name: test
+on:
+  push:
+    branches-ignore: [ main ]
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build
+        uses: ./
+      - name: Upload
+        uses: actions/upload-artifact@v3.0.0
+        with:
+          name: v1.0.${{ env.version }}
+          path: /home/runner/work/_temp/_github_home/nginx.deb

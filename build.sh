@@ -30,6 +30,7 @@ echo Fetch additional dependencies.
 cd ../..
 git clone --recursive https://github.com/google/ngx_brotli > /dev/null 2>&1
 git clone https://github.com/openresty/headers-more-nginx-module > /dev/null 2>&1
+git clone https://github.com/tokers/zstd-nginx-module > /dev/null 2>&1
 wget -q https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.40/pcre2-10.40.tar.gz
 tar zxf pcre2-*.tar.gz
 rm -rf pcre2-*.tar.gz
@@ -40,7 +41,7 @@ make -f Makefile.in distclean > /dev/null 2>&1
 echo Build nginx.
 cd ../..
 sed -i 's/CFLAGS=""/CFLAGS="-Wno-ignored-qualifiers"/g' rules
-sed -i 's/--sbin-path=\/usr\/sbin\/nginx/--sbin-path=\/usr\/sbin\/nginx --add-module=$(CURDIR)\/debian\/modules\/ngx_brotli --add-module=$(CURDIR)\/debian\/modules\/headers-more-nginx-module/g' rules
+sed -i 's/--sbin-path=\/usr\/sbin\/nginx/--sbin-path=\/usr\/sbin\/nginx --add-module=$(CURDIR)\/debian\/modules\/ngx_brotli --add-module=$(CURDIR)\/debian\/modules\/headers-more-nginx-module --add-module=$(CURDIR)\/debian\/modules\/zstd-nginx-module/g' rules
 sed -i 's/--with-cc-opt="$(CFLAGS)" --with-ld-opt="$(LDFLAGS)"/--with-http_v3_module --with-stream_quic_module --with-zlib=$(CURDIR)\/debian\/modules\/zlib --with-pcre=$(CURDIR)\/debian\/modules\/pcre --with-cc-opt="-I..\/modules\/boringssl\/include $(CFLAGS)" --with-ld-opt="-ljemalloc -L..\/modules\/boringssl\/build\/ssl -L..\/modules\/boringssl\/build\/crypto $(LDFLAGS)"/g' rules
 cd ..
 dpkg-buildpackage -b > /dev/null 2>&1

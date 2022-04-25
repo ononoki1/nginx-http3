@@ -4,9 +4,9 @@ on:
     branches-ignore: [ main ]
   workflow_dispatch:
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
-    name: build
+    name: test
     steps:
       - name: Checkout
         uses: actions/checkout@v3

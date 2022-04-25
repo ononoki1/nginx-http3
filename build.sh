@@ -2,7 +2,7 @@ set -e
 cd /github/home
 echo Install dependencies.
 apt-get update > /dev/null 2>&1
-apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy cmake curl dpkg-dev git golang libjemalloc-dev libunwind-dev libzstd-dev mercurial rsync wget unzip uuid-dev > /dev/null 2>&1
+apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy cmake curl dpkg-dev git golang libjemalloc-dev libpcre2-dev libunwind-dev libzstd-dev mercurial rsync wget > /dev/null 2>&1
 wget -qO /etc/apt/trusted.gpg.d/nginx_signing.asc https://nginx.org/keys/nginx_signing.key
 echo -e 'deb https://nginx.org/packages/mainline/debian bullseye nginx\ndeb-src https://nginx.org/packages/mainline/debian bullseye nginx' >> /etc/apt/sources.list
 echo -e 'Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900' > /etc/apt/preferences.d/99nginx
@@ -31,10 +31,6 @@ cd ../..
 git clone --recursive https://github.com/google/ngx_brotli > /dev/null 2>&1
 git clone https://github.com/openresty/headers-more-nginx-module > /dev/null 2>&1
 git clone https://github.com/tokers/zstd-nginx-module > /dev/null 2>&1
-wget -q https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.40/pcre2-10.40.tar.gz
-tar zxf pcre2-*.tar.gz
-rm -rf pcre2-*.tar.gz
-mv pcre2-* pcre
 git clone https://github.com/cloudflare/zlib > /dev/null 2>&1
 cd zlib
 make -f Makefile.in distclean > /dev/null 2>&1
@@ -42,7 +38,7 @@ echo Build nginx.
 cd ../..
 sed -i 's/CFLAGS=""/CFLAGS="-Wno-ignored-qualifiers"/g' rules
 sed -i 's/--sbin-path=\/usr\/sbin\/nginx/--sbin-path=\/usr\/sbin\/nginx --add-module=$(CURDIR)\/debian\/modules\/ngx_brotli --add-module=$(CURDIR)\/debian\/modules\/headers-more-nginx-module --add-module=$(CURDIR)\/debian\/modules\/zstd-nginx-module/g' rules
-sed -i 's/--with-cc-opt="$(CFLAGS)" --with-ld-opt="$(LDFLAGS)"/--with-http_v3_module --with-stream_quic_module --with-zlib=$(CURDIR)\/debian\/modules\/zlib --with-pcre=$(CURDIR)\/debian\/modules\/pcre --with-cc-opt="-I..\/modules\/boringssl\/include $(CFLAGS)" --with-ld-opt="-ljemalloc -L..\/modules\/boringssl\/build\/ssl -L..\/modules\/boringssl\/build\/crypto $(LDFLAGS)"/g' rules
+sed -i 's/--with-cc-opt="$(CFLAGS)" --with-ld-opt="$(LDFLAGS)"/--with-http_v3_module --with-stream_quic_module --with-zlib=$(CURDIR)\/debian\/modules\/zlib --with-cc-opt="-I..\/modules\/boringssl\/include $(CFLAGS)" --with-ld-opt="-ljemalloc -L..\/modules\/boringssl\/build\/ssl -L..\/modules\/boringssl\/build\/crypto $(LDFLAGS)"/g' rules
 cd ..
 dpkg-buildpackage -b > /dev/null 2>&1
 cd ..

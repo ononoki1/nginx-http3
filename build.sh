@@ -15,9 +15,9 @@ hg clone -b quic https://hg.nginx.org/nginx-quic > /dev/null 2>&1
 rsync -r nginx-quic/ nginx > /dev/null 2>&1
 echo Fetch boringssl source code.
 cd nginx
-curl -s https://raw.githubusercontent.com/kn007/patch/master/Enable_BoringSSL_OCSP.patch | patch -p1 > /dev/null 2>&1
-curl -s https://raw.githubusercontent.com/kn007/patch/master/nginx.patch | patch -p1 > /dev/null 2>&1
-curl -s https://raw.githubusercontent.com/kn007/patch/master/use_openssl_md5_sha1.patch | patch -p1 > /dev/null 2>&1
+curl -s https://raw.githubusercontent.com/kn007/patch/master/Enable_BoringSSL_OCSP.patch | patch -p1
+curl -s https://raw.githubusercontent.com/kn007/patch/master/nginx.patch | patch -p1
+curl -s https://raw.githubusercontent.com/kn007/patch/master/use_openssl_md5_sha1.patch | patch -p1
 mkdir debian/modules
 cd debian/modules
 git clone https://github.com/google/boringssl > /dev/null 2>&1
@@ -30,17 +30,17 @@ echo Fetch ngx_brotli and ngx_headers_more source code.
 cd ../..
 git clone --recursive https://github.com/google/ngx_brotli > /dev/null 2>&1
 git clone https://github.com/openresty/headers-more-nginx-module > /dev/null 2>&1
-git clone https://github.com/cloudflare/zlib > /dev/null 2>&1
+git clone https://github.com/cloudflare/zlib
 wget -q https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.40/pcre2-10.40.tar.gz
 tar zxf pcre2-*.tar.gz
 mv pcre2-* pcre
-echo Build target.
+echo Build nginx.
 cd ..
 sed -i 's/CFLAGS=""/CFLAGS="-Wno-ignored-qualifiers"/g' rules
 sed -i 's/--sbin-path=\/usr\/sbin\/nginx/--sbin-path=\/usr\/sbin\/nginx --add-module=$(CURDIR)\/debian\/modules\/ngx_brotli --add-module=$(CURDIR)\/debian\/modules\/headers-more-nginx-module/g' rules
-sed -i 's/--with-cc-opt="$(CFLAGS)" --with-ld-opt="$(LDFLAGS)"/--with-http_v3_module --with-stream_quic_module --with-zlib=$(CURDIR)\/debian\/modules\/zlib --with-pcre=$(CURDIR)\/debian\/modules\/pcre --with-cc-opt="-I..\/modules\/boringssl\/include $(CFLAGS)" --with-ld-opt="-L..\/modules\/boringssl\/build\/ssl -L..\/modules\/boringssl\/build\/crypto $(LDFLAGS)"/g' rules
+sed -i 's/--with-cc-opt="$(CFLAGS)" --with-ld-opt="$(LDFLAGS)"/--with-http_v3_module --with-stream_quic_module --with-zlib=$(CURDIR)\/debian\/modules\/zlib --with-pcre=$(CURDIR)\/debian\/modules\/pcre --with-cc-opt="-I..\/modules\/boringssl\/include $(CFLAGS)" --with-ld-opt="-ljemalloc -L..\/modules\/boringssl\/build\/ssl -L..\/modules\/boringssl\/build\/crypto $(LDFLAGS)"/g' rules
 cd ..
-dpkg-buildpackage -b > /dev/null 2>&1
+dpkg-buildpackage -b
 cd ..
 mv nginx_*.deb nginx.deb
 hash=$(sha256sum nginx.deb | awk '{print $1}')

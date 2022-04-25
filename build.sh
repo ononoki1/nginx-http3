@@ -16,7 +16,6 @@ rsync -r nginx-quic/ nginx > /dev/null 2>&1
 echo Fetch boringssl source code.
 cd nginx
 curl -s https://raw.githubusercontent.com/kn007/patch/master/Enable_BoringSSL_OCSP.patch | patch -p1
-curl -s https://raw.githubusercontent.com/kn007/patch/master/nginx.patch | patch -p1
 curl -s https://raw.githubusercontent.com/kn007/patch/master/use_openssl_md5_sha1.patch | patch -p1
 mkdir debian/modules
 cd debian/modules

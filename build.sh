@@ -32,12 +32,13 @@ git clone --recursive https://github.com/google/ngx_brotli > /dev/null 2>&1
 git clone https://github.com/openresty/headers-more-nginx-module > /dev/null 2>&1
 git clone https://github.com/tokers/zstd-nginx-module > /dev/null 2>&1
 git clone https://github.com/cloudflare/zlib > /dev/null 2>&1
+git clone -b current https://github.com/ADD-SP/ngx_waf > /dev/null 2>&1
 cd zlib
 make -f Makefile.in distclean > /dev/null 2>&1
 echo Build nginx.
 cd ../..
-sed -i 's/CFLAGS=""/CFLAGS="-Wno-ignored-qualifiers"/g' rules
-sed -i 's/--sbin-path=\/usr\/sbin\/nginx/--sbin-path=\/usr\/sbin\/nginx --add-module=$(CURDIR)\/debian\/modules\/ngx_brotli --add-module=$(CURDIR)\/debian\/modules\/headers-more-nginx-module --add-module=$(CURDIR)\/debian\/modules\/zstd-nginx-module/g' rules
+sed -i 's/CFLAGS=""/CFLAGS="-fstack-protector-strong -Wno-ignored-qualifiers -Wno-sign-compare"/g' rules
+sed -i 's/--sbin-path=\/usr\/sbin\/nginx/--sbin-path=\/usr\/sbin\/nginx --add-module=$(CURDIR)\/debian\/modules\/ngx_brotli --add-module=$(CURDIR)\/debian\/modules\/headers-more-nginx-module --add-module=$(CURDIR)\/debian\/modules\/zstd-nginx-module --add-module=$(CURDIR)\/debian\/modules\/ngx_waf/g' rules
 sed -i 's/--with-cc-opt="$(CFLAGS)" --with-ld-opt="$(LDFLAGS)"/--with-http_v3_module --with-stream_quic_module --with-zlib=$(CURDIR)\/debian\/modules\/zlib --with-cc-opt="-I..\/modules\/boringssl\/include $(CFLAGS)" --with-ld-opt="-ljemalloc -L..\/modules\/boringssl\/build\/ssl -L..\/modules\/boringssl\/build\/crypto $(LDFLAGS)"/g' rules
 cd ..
 dpkg-buildpackage -b > /dev/null 2>&1

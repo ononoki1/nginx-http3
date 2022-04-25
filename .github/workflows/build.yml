@@ -1,0 +1,33 @@
+name: build
+on:
+  schedule:
+  - cron: '0 * * * *'
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build
+        uses: ./
+      - name: Upload
+        uses: actions/upload-artifact@v3.0.0
+        with:
+          name: v1.0.${{ env.version }}
+          path: /home/runner/work/_temp/_github_home/nginx.deb
+      - name: Update
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update hash and version
+      - name: Release
+        if: ${{ env.change }}
+        uses: softprops/action-gh-release@v1
+        with:
+          files: /home/runner/work/_temp/_github_home/nginx.deb
+          body: "SHA256: ${{ env.hash }}"
+          tag_name: v1.0.${{ env.version }}
+          generate_release_notes: false

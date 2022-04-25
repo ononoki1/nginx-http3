@@ -13,10 +13,11 @@ apt-get source nginx > /dev/null 2>&1
 mv nginx-* nginx
 hg clone -b quic https://hg.nginx.org/nginx-quic > /dev/null 2>&1
 rsync -r nginx-quic/ nginx > /dev/null 2>&1
-echo Fetch boringssl source code.
+echo Add patches.
 cd nginx
 curl -s https://raw.githubusercontent.com/kn007/patch/master/Enable_BoringSSL_OCSP.patch | patch -p1 > /dev/null 2>&1
 curl -s https://raw.githubusercontent.com/kn007/patch/master/use_openssl_md5_sha1.patch | patch -p1 > /dev/null 2>&1
+echo Fetch boringssl source code.
 mkdir debian/modules
 cd debian/modules
 git clone https://github.com/google/boringssl > /dev/null 2>&1
@@ -25,17 +26,19 @@ mkdir boringssl/build
 cd boringssl/build
 cmake .. > /dev/null 2>&1
 make -j$(nproc) > /dev/null 2>&1
-echo Fetch ngx_brotli and ngx_headers_more source code.
+echo Fetch additional requirements.
 cd ../..
 git clone --recursive https://github.com/google/ngx_brotli > /dev/null 2>&1
 git clone https://github.com/openresty/headers-more-nginx-module > /dev/null 2>&1
-git clone https://github.com/cloudflare/zlib > /dev/null 2>&1
 wget -q https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.40/pcre2-10.40.tar.gz
 tar zxf pcre2-*.tar.gz
 rm -rf pcre2-*.tar.gz
 mv pcre2-* pcre
+git clone https://github.com/cloudflare/zlib > /dev/null 2>&1
+cd zlib
+make -f Makefile.in distclean
 echo Build nginx.
-cd ..
+cd ../..
 sed -i 's/CFLAGS=""/CFLAGS="-Wno-ignored-qualifiers"/g' rules
 sed -i 's/--sbin-path=\/usr\/sbin\/nginx/--sbin-path=\/usr\/sbin\/nginx --add-module=$(CURDIR)\/debian\/modules\/ngx_brotli --add-module=$(CURDIR)\/debian\/modules\/headers-more-nginx-module/g' rules
 sed -i 's/--with-cc-opt="$(CFLAGS)" --with-ld-opt="$(LDFLAGS)"/--with-http_v3_module --with-stream_quic_module --with-zlib=$(CURDIR)\/debian\/modules\/zlib --with-pcre=$(CURDIR)\/debian\/modules\/pcre --with-cc-opt="-I..\/modules\/boringssl\/include $(CFLAGS)" --with-ld-opt="-ljemalloc -L..\/modules\/boringssl\/build\/ssl -L..\/modules\/boringssl\/build\/crypto $(LDFLAGS)"/g' rules

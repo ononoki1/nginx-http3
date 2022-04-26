@@ -20,6 +20,7 @@ jobs:
           name: v1.0.${{ env.version }}
           path: /home/runner/work/_temp/_github_home/nginx.deb
       - name: Update
+        if: ${{ env.change }}
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Update hash and version

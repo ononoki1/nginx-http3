@@ -2,6 +2,7 @@ name: test
 on:
   push:
     branches-ignore: [ main ]
+    paths: [ '**.sh' ]
   workflow_dispatch:
 jobs:
   test:

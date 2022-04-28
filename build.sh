@@ -4,7 +4,7 @@ echo Install dependencies.
 apt-get update > /dev/null 2>&1
 apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy cmake curl git golang libcurl4-openssl-dev libjemalloc-dev libmodsecurity-dev libsodium-dev libunwind-dev libzstd-dev mercurial ninja-build rsync wget > /dev/null 2>&1
 wget -qO /etc/apt/trusted.gpg.d/nginx_signing.asc https://nginx.org/keys/nginx_signing.key
-echo 'deb-src http://nginx.org/packages/mainline/debian bullseye nginx' >> /etc/apt/sources.list
+echo deb-src http://nginx.org/packages/mainline/debian bullseye nginx >> /etc/apt/sources.list
 echo -e 'Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900' > /etc/apt/preferences.d/99nginx
 apt-get update > /dev/null 2>&1
 apt-get build-dep --allow-change-held-packages --allow-downgrades --allow-remove-essential -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy nginx > /dev/null 2>&1

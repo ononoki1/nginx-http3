@@ -51,13 +51,18 @@ cd ..
 mv nginx_*.deb nginx.deb
 hash=$(sha256sum nginx.deb | awk '{print $1}')
 version=$(cat /github/workspace/version)
+minor=$(cat /github/workspace/minor)
 if [[ $hash != $(cat /github/workspace/hash) ]]; then
+  echo $hash > /github/workspace/hash
   version=$(($(cat /github/workspace/version)+1))
+  echo $version > /github/workspace/version
+  if [[ $GITHUB_EVENT_NAME == push ]]; then
+    minor=$(($(cat /github/workspace/minor)+1))
+    echo $minor > /github/workspace/minor
+  fi
   change=1
   echo This is a new version.
 else
   echo This is an old version.
 fi
-echo $hash > /github/workspace/hash
-echo $version > /github/workspace/version
-echo -e "hash=$hash\nversion=$version\nchange=$change" >> $GITHUB_ENV
+echo -e "hash=$hash\nversion=$version\nminor=$minor\nchange=$change" >> $GITHUB_ENV

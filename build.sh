@@ -54,12 +54,14 @@ version=$(cat /github/workspace/version)
 minor=$(cat /github/workspace/minor)
 if [[ $hash != $(cat /github/workspace/hash) ]]; then
   echo $hash > /github/workspace/hash
-  version=$(($(cat /github/workspace/version)+1))
-  echo $version > /github/workspace/version
   if [[ $GITHUB_EVENT_NAME == push ]]; then
+    version=0
     minor=$(($(cat /github/workspace/minor)+1))
     echo $minor > /github/workspace/minor
+  else
+    version=$(($(cat /github/workspace/version)+1))
   fi
+  echo $version > /github/workspace/version
   change=1
   echo This is a new version.
 else

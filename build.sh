@@ -50,21 +50,21 @@ dpkg-buildpackage -b > /dev/null 2>&1
 cd ..
 mv nginx_*.deb nginx.deb
 hash=$(sha256sum nginx.deb | awk '{print $1}')
-version=$(cat /github/workspace/version)
+patch=$(cat /github/workspace/patch)
 minor=$(cat /github/workspace/minor)
 if [[ $hash != $(cat /github/workspace/hash) ]]; then
   echo $hash > /github/workspace/hash
   if [[ $GITHUB_EVENT_NAME == push ]]; then
-    version=0
+    patch=0
     minor=$(($(cat /github/workspace/minor)+1))
     echo $minor > /github/workspace/minor
   else
-    version=$(($(cat /github/workspace/version)+1))
+    patch=$(($(cat /github/workspace/version)+1))
   fi
-  echo $version > /github/workspace/version
+  echo $patch > /github/workspace/patch
   change=1
   echo This is a new version.
 else
   echo This is an old version.
 fi
-echo -e "hash=$hash\nversion=$version\nminor=$minor\nchange=$change" >> $GITHUB_ENV
+echo -e "hash=$hash\npatch=$patch\nminor=$minor\nchange=$change" >> $GITHUB_ENV

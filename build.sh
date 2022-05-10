@@ -2,7 +2,7 @@ set -e
 cd /github/home
 echo Install dependencies.
 apt-get update > /dev/null 2>&1
-apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy cmake curl git golang libcurl4-openssl-dev libjemalloc-dev libmodsecurity-dev libsodium-dev libunwind-dev libzstd-dev mercurial ninja-build rsync wget > /dev/null 2>&1
+apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy cmake curl git golang libcurl4-openssl-dev libmodsecurity-dev libsodium-dev libunwind-dev libzstd-dev mercurial ninja-build rsync wget > /dev/null 2>&1
 wget -qO /etc/apt/trusted.gpg.d/nginx_signing.asc https://nginx.org/keys/nginx_signing.key
 echo deb-src http://nginx.org/packages/mainline/debian bullseye nginx >> /etc/apt/sources.list
 echo -e 'Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900' > /etc/apt/preferences.d/99nginx
@@ -36,6 +36,12 @@ git clone https://github.com/cloudflare/zlib > /dev/null 2>&1
 cd zlib
 make -f Makefile.in distclean > /dev/null 2>&1
 cd ..
+git clone https://github.com/jemalloc/jemalloc
+./autogen.sh
+make
+make install
+echo /usr/local/lib >> /etc/ld.so.conf.d/local.conf
+ldconfig
 git clone --recursive https://github.com/google/ngx_brotli > /dev/null 2>&1
 git clone https://github.com/openresty/headers-more-nginx-module > /dev/null 2>&1
 git clone https://github.com/GetPageSpeed/ngx_security_headers > /dev/null 2>&1

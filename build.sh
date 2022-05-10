@@ -37,11 +37,13 @@ cd zlib
 make -f Makefile.in distclean > /dev/null 2>&1
 cd ..
 git clone https://github.com/jemalloc/jemalloc
+cd jemalloc
 ./autogen.sh
 make
 make install
 echo /usr/local/lib >> /etc/ld.so.conf.d/local.conf
 ldconfig
+cd ..
 git clone --recursive https://github.com/google/ngx_brotli > /dev/null 2>&1
 git clone https://github.com/openresty/headers-more-nginx-module > /dev/null 2>&1
 git clone https://github.com/GetPageSpeed/ngx_security_headers > /dev/null 2>&1

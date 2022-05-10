@@ -36,12 +36,11 @@ git clone https://github.com/cloudflare/zlib > /dev/null 2>&1
 cd zlib
 make -f Makefile.in distclean > /dev/null 2>&1
 cd ..
-git clone https://github.com/jemalloc/jemalloc
+git clone https://github.com/jemalloc/jemalloc > /dev/null 2>&1
 cd jemalloc
-./autogen.sh
-make
+./autogen.sh > /dev/null 2>&1
+make > /dev/null 2>&1
 make install
-echo /usr/local/lib >> /etc/ld.so.conf.d/local.conf
 ldconfig
 cd ..
 git clone --recursive https://github.com/google/ngx_brotli > /dev/null 2>&1
@@ -54,7 +53,7 @@ sed -i 's/CFLAGS=""/CFLAGS="-fstack-protector-strong -Wno-ignored-qualifiers -Wn
 sed -i 's/--sbin-path=\/usr\/sbin\/nginx/--sbin-path=\/usr\/sbin\/nginx --add-module=$(CURDIR)\/debian\/modules\/ngx_waf --add-module=$(CURDIR)\/debian\/modules\/ngx_brotli --add-module=$(CURDIR)\/debian\/modules\/headers-more-nginx-module --add-module=$(CURDIR)\/debian\/modules\/ngx_security_headers --add-module=$(CURDIR)\/debian\/modules\/zstd-nginx-module/g' rules
 sed -i 's/--with-cc-opt="$(CFLAGS)" --with-ld-opt="$(LDFLAGS)"/--with-http_v3_module --with-stream_quic_module --with-zlib=$(CURDIR)\/debian\/modules\/zlib --with-cc-opt="-I..\/modules\/boringssl\/include $(CFLAGS)" --with-ld-opt="-ljemalloc -L..\/modules\/boringssl\/build\/ssl -L..\/modules\/boringssl\/build\/crypto $(LDFLAGS)"/g' rules
 cd ..
-dpkg-buildpackage -b > /dev/null 2>&1
+dpkg-buildpackage -b
 cd ..
 mv nginx_*.deb nginx.deb
 hash=$(sha256sum nginx.deb | awk '{print $1}')

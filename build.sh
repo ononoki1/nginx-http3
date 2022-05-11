@@ -25,8 +25,16 @@ mkdir boringssl/build
 cd boringssl/build
 cmake -GNinja .. > /dev/null 2>&1
 ninja > /dev/null 2>&1
-echo Fetch additional dependencies.
+echo Fetch jemalloc source code.
 cd ../..
+git clone https://github.com/jemalloc/jemalloc > /dev/null 2>&1
+echo Build jemalloc.
+cd jemalloc
+./autogen.sh > /dev/null 2>&1
+make > /dev/null 2>&1
+make install > /dev/null 2>&1
+echo Fetch additional dependencies.
+cd ..
 git clone -b current https://github.com/ADD-SP/ngx_waf > /dev/null 2>&1
 cd ngx_waf
 git clone https://github.com/DaveGamble/cJSON lib/cjson > /dev/null 2>&1
@@ -35,12 +43,6 @@ cd ..
 git clone https://github.com/cloudflare/zlib > /dev/null 2>&1
 cd zlib
 make -f Makefile.in distclean > /dev/null 2>&1
-cd ..
-git clone https://github.com/jemalloc/jemalloc > /dev/null 2>&1
-cd jemalloc
-./autogen.sh > /dev/null 2>&1
-make > /dev/null 2>&1
-make install > /dev/null 2>&1
 cd ..
 git clone --recursive https://github.com/google/ngx_brotli > /dev/null 2>&1
 git clone https://github.com/openresty/headers-more-nginx-module > /dev/null 2>&1

@@ -68,7 +68,7 @@ if [[ $hash != $(cat /github/workspace/hash) ]]; then
     minor=$(($(cat /github/workspace/minor)+1))
     echo $minor > /github/workspace/minor
   else
-    patch=$(($(cat /github/workspace/version)+1))
+    patch=$(($(cat /github/workspace/patch)+1))
   fi
   echo $patch > /github/workspace/patch
   change=1

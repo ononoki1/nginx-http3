@@ -41,7 +41,6 @@ cd jemalloc
 ./autogen.sh > /dev/null 2>&1
 make > /dev/null 2>&1
 make install > /dev/null 2>&1
-#ldconfig
 cd ..
 git clone --recursive https://github.com/google/ngx_brotli > /dev/null 2>&1
 git clone https://github.com/openresty/headers-more-nginx-module > /dev/null 2>&1
@@ -54,7 +53,7 @@ sed -i 's/--sbin-path=\/usr\/sbin\/nginx/--sbin-path=\/usr\/sbin\/nginx --add-mo
 sed -i 's/--with-cc-opt="$(CFLAGS)" --with-ld-opt="$(LDFLAGS)"/--with-http_v3_module --with-stream_quic_module --with-zlib=$(CURDIR)\/debian\/modules\/zlib --with-cc-opt="-I..\/modules\/boringssl\/include $(CFLAGS)" --with-ld-opt="-ljemalloc -L..\/modules\/boringssl\/build\/ssl -L..\/modules\/boringssl\/build\/crypto $(LDFLAGS)"/g' rules
 sed -i 's/dh_shlibdeps -a/dh_shlibdeps -a -- --ignore-missing-info/g' rules
 cd ..
-dpkg-buildpackage -b
+dpkg-buildpackage -b > /dev/null 2>&1
 cd ..
 mv nginx_*.deb nginx.deb
 hash=$(sha256sum nginx.deb | awk '{print $1}')

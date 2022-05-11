@@ -40,8 +40,8 @@ git clone https://github.com/jemalloc/jemalloc > /dev/null 2>&1
 cd jemalloc
 ./autogen.sh > /dev/null 2>&1
 make > /dev/null 2>&1
-make install
-ldconfig
+make install > /dev/null 2>&1
+#ldconfig
 cd ..
 git clone --recursive https://github.com/google/ngx_brotli > /dev/null 2>&1
 git clone https://github.com/openresty/headers-more-nginx-module > /dev/null 2>&1

@@ -30,8 +30,8 @@ cd ../..
 git clone https://github.com/curl/curl > /dev/null 2>&1
 echo Build curl.
 cd curl
-autoreconf -fi
-./configure
+autoreconf -fi > /dev/null 2>&1
+./configure --with-openssl
 make -j$(nproc)
 make install
 echo Fetch jemalloc source code.

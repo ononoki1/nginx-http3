@@ -2,9 +2,9 @@ set -e
 cd /github/home
 echo Install dependencies.
 apt-get update > /dev/null 2>&1
-apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy cmake curl git golang libcurl4-openssl-dev libmaxminddb-dev libmodsecurity-dev libsodium-dev libunwind-dev libzstd-dev mercurial ninja-build rsync wget > /dev/null 2>&1
+apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy cmake curl git golang libmaxminddb-dev libmodsecurity-dev libunwind-dev libzstd-dev mercurial ninja-build rsync wget > /dev/null 2>&1
 wget -qO /etc/apt/trusted.gpg.d/nginx_signing.asc https://nginx.org/keys/nginx_signing.key
-echo deb-src http://nginx.org/packages/mainline/debian bullseye nginx >> /etc/apt/sources.list
+echo deb-src https://nginx.org/packages/mainline/debian bullseye nginx >> /etc/apt/sources.list
 echo -e 'Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900' > /etc/apt/preferences.d/99nginx
 apt-get update > /dev/null 2>&1
 apt-get build-dep --allow-change-held-packages --allow-downgrades --allow-remove-essential -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy nginx > /dev/null 2>&1
@@ -24,14 +24,31 @@ echo Build boringssl.
 mkdir boringssl/build
 cd boringssl/build
 cmake -GNinja .. > /dev/null 2>&1
-ninja > /dev/null 2>&1
-echo Fetch jemalloc source code.
+ninja -j$(nproc) > /dev/null 2>&1
+echo Fetch curl source code.
 cd ../..
+git clone https://github.com/curl/curl > /dev/null 2>&1
+echo Build curl.
+cd curl
+autoreconf -fi > /dev/null 2>&1
+./configure --with-openssl > /dev/null 2>&1
+make -j$(nproc) > /dev/null 2>&1
+make install > /dev/null 2>&1
+echo Fetch jemalloc source code.
+cd ..
 git clone https://github.com/jemalloc/jemalloc > /dev/null 2>&1
 echo Build jemalloc.
 cd jemalloc
 ./autogen.sh > /dev/null 2>&1
-make > /dev/null 2>&1
+make -j$(nproc) > /dev/null 2>&1
+make install > /dev/null 2>&1
+echo Fetch libsodium source code.
+cd ..
+git clone -b stable https://github.com/jedisct1/libsodium > /dev/null 2>&1
+echo Build libsodium.
+cd libsodium
+./configure > /dev/null 2>&1
+make -j$(nproc) > /dev/null 2>&1
 make install > /dev/null 2>&1
 echo Fetch additional dependencies.
 cd ..

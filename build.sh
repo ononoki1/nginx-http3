@@ -47,11 +47,10 @@ cd ..
 git clone https://github.com/jedisct1/libsodium > /dev/null 2>&1
 echo Build libsodium.
 cd libsodium
-./autogen.sh -s
-ls -Alh
-./configure
-make -j$(nproc)
-make install
+./autogen.sh -s > /dev/null 2>&1
+./configure > /dev/null 2>&1
+make -j$(nproc) > /dev/null 2>&1
+make install > /dev/null 2>&1
 echo Fetch additional dependencies.
 cd ..
 git clone -b current https://github.com/ADD-SP/ngx_waf > /dev/null 2>&1

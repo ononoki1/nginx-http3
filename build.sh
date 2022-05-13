@@ -47,7 +47,8 @@ cd ..
 git clone https://github.com/jedisct1/libsodium > /dev/null 2>&1
 echo Build libsodium.
 cd libsodium
-./autogen.sh
+./autogen.sh -s
+ls -Alh
 ./configure
 make -j$(nproc)
 make install

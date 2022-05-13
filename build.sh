@@ -44,10 +44,9 @@ make -j$(nproc) > /dev/null 2>&1
 make install > /dev/null 2>&1
 echo Fetch libsodium source code.
 cd ..
-git clone https://github.com/jedisct1/libsodium > /dev/null 2>&1
+git clone -b stable https://github.com/jedisct1/libsodium > /dev/null 2>&1
 echo Build libsodium.
 cd libsodium
-./autogen.sh -s > /dev/null 2>&1
 ./configure > /dev/null 2>&1
 make -j$(nproc) > /dev/null 2>&1
 make install > /dev/null 2>&1

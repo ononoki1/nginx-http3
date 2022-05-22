@@ -13,3 +13,11 @@
 - Zstandard support, powered by [zstd-nginx-module](https://github.com/tokers/zstd-nginx-module)
 - Use [BoringSSL](https://github.com/google/boringssl), [Cloudflare's zlib](https://github.com/cloudflare/zlib) and [jemalloc](https://github.com/jemalloc/jemalloc)
 - Use OpenSSL's hash functions instead of NGINX's, powered by [this patch](https://github.com/kn007/patch/blob/master/use_openssl_md5_sha1.patch)
+
+## Usage
+
+Download `nginx.deb` package from [releases](https://github.com/ononoki1/nginx/releases), then install it with the following command.
+
+```bash
+apt install ./nginx.deb
+```

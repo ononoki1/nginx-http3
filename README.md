@@ -21,3 +21,129 @@ Download `nginx.deb` package from [releases](https://github.com/ononoki1/nginx/r
 ```bash
 apt install ./nginx.deb
 ```
+
+## Recommended NGINX config
+
+```nginx
+http {
+  aio threads;
+  aio_write on;
+  brotli on;
+  brotli_comp_level 0; # high level compression is simply a waste of cpu
+  brotli_types application/atom+xml application/javascript application/json application/rss+xml application/vnd.ms-fontobject application/x-font-opentype application/x-font-truetype application/x-font-ttf application/x-javascript application/xhtml+xml application/xml font/eot font/opentype font/otf font/truetype image/svg+xml image/vnd.microsoft.icon image/x-icon image/x-win-bitmap text/css text/javascript text/plain text/xml;
+  client_body_buffer_size 1m; # tweak these buffer sizes as you need
+  client_header_buffer_size 4k;
+  client_max_body_size 0;
+  directio 1m;
+  etag off;
+  fastcgi_buffers 1024 16k;
+  fastcgi_buffer_size 64k;
+  fastcgi_busy_buffers_size 128k;
+  gzip on;
+  gzip_types application/atom+xml application/javascript application/json application/rss+xml application/vnd.ms-fontobject application/x-font-opentype application/x-font-truetype application/x-font-ttf application/x-javascript application/xhtml+xml application/xml font/eot font/opentype font/otf font/truetype image/svg+xml image/vnd.microsoft.icon image/x-icon image/x-win-bitmap text/css text/javascript text/plain text/xml;
+  hide_server_tokens on;
+  if_modified_since before;
+  large_client_header_buffers 64 8k;
+  proxy_buffers 1024 16k;
+  proxy_buffer_size 64k;
+  proxy_busy_buffers_size 128k;
+  proxy_http_version 1.1;
+  proxy_set_header Connection $http_connection;
+  proxy_set_header Host $http_host;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_ssl_protocols TLSv1.3;
+  proxy_ssl_server_name on;
+  proxy_ssl_trusted_certificate /etc/ssl/certs/ca-certificates.crt;
+  proxy_ssl_verify on;
+  proxy_ssl_verify_depth 2;
+  quic_gso on;
+  quic_retry on;
+  resolver 127.0.0.1; # change if you don't have local dns
+  sendfile on;
+  server_tokens off;
+  ssl_certificate /path/to/cert_plus_intermediate;
+  ssl_certificate_key /path/to/key;
+  ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305; # need to use ec cert
+  ssl_early_data on;
+  ssl_ecdh_curve X25519:P-256;
+  ssl_protocols TLSv1.2 TLSv1.3;
+  ssl_session_cache shared:SSL:10m;
+  ssl_session_timeout 1d;
+  ssl_stapling on;
+  ssl_stapling_file /path/to/ocsp; # generate by `openssl ocsp -no_nonce -issuer /path/to/intermediate -cert /path/to/cert -url "$(openssl x509 -in /path/to/cert -noout -ocsp_uri)" -respout /path/to/ocsp`
+  tcp_nopush on;
+  zstd on;
+  zstd_types application/atom+xml application/javascript application/json application/rss+xml application/vnd.ms-fontobject application/x-font-opentype application/x-font-truetype application/x-font-ttf application/x-javascript application/xhtml+xml application/xml font/eot font/opentype font/otf font/truetype image/svg+xml image/vnd.microsoft.icon image/x-icon image/x-win-bitmap text/css text/javascript text/plain text/xml;
+  server {
+    listen 80 reuseport;
+    listen [::]:80 reuseport;
+    return 444;
+  }
+  server {
+    listen 443 reuseport ssl http2;
+    listen [::]:443 reuseport ssl http2;
+    listen 443 reuseport http3;
+    listen [::]:443 reuseport http3;
+    ssl_reject_handshake on;
+  }
+  server {
+    listen 80;
+    listen [::]:80;
+    server_name example.com dynamic.example.com php.example.com www.example.com;
+    return 301 https://$host$request_uri;
+  }
+  server { # example for static site
+    listen 443;
+    listen [::]:443;
+    listen 443 http3;
+    listen [::]:443 http3;
+    server_name example.com;
+    root /path/to/static/site;
+    add_header Strict-Transport-Security 'max-age=63072000; includeSubDomains; preload';
+    add_header Alt-Svc 'h3=":443"; ma=2592000';
+    add_header Cache-Control no-cache;
+  }
+  server { # example for dynamic site
+    listen 443;
+    listen [::]:443;
+    listen 443 http3;
+    listen [::]:443 http3;
+    server_name dynamic.example.com;
+    add_header Strict-Transport-Security 'max-age=63072000; includeSubDomains; preload';
+    add_header Alt-Svc 'h3=":443"; ma=2592000';
+    location / {
+      proxy_pass http://127.0.0.1:8888;
+    }
+  }
+  server { # example for dynamic site with php
+    listen 443;
+    listen [::]:443;
+    listen 443 http3;
+    listen [::]:443 http3;
+    server_name php.example.com;
+    root /path/to/php/site;
+    index index.php;
+    add_header Strict-Transport-Security 'max-age=63072000; includeSubDomains; preload';
+    add_header Alt-Svc 'h3=":443"; ma=2592000';
+    location ~ ^.+\.php$ {
+      include fastcgi_params;
+      fastcgi_param HTTP_PROXY '';
+      fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+      fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+    }
+    location ~ \.(gif|ico|jpg|png|svg|js|css|htm|html|mp3|mp4|wav|ogg|avi|ttf|eot|woff|woff2|json)$ {
+      add_header Cache-Control no-cache;
+    }
+  }
+  server {
+    listen 443;
+    listen [::]:443;
+    listen 443 http3;
+    listen [::]:443 http3;
+    server_name www.example.com;
+    add_header Strict-Transport-Security 'max-age=63072000; includeSubDomains; preload';
+    add_header Alt-Svc 'h3=":443"; ma=2592000';
+    return 301 https://example.com$request_uri;
+  }
+}
+```

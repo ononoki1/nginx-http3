@@ -49,7 +49,7 @@ http {
   proxy_busy_buffers_size 128k;
   proxy_http_version 1.1;
   proxy_set_header Connection $http_connection;
-  proxy_set_header Host $http_host;
+  proxy_set_header Host $host;
   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
   proxy_ssl_protocols TLSv1.3;
   proxy_ssl_server_name on;
@@ -76,7 +76,7 @@ http {
   zstd_types application/atom+xml application/javascript application/json application/rss+xml application/vnd.ms-fontobject application/x-font-opentype application/x-font-truetype application/x-font-ttf application/x-javascript application/xhtml+xml application/xml font/eot font/opentype font/otf font/truetype image/svg+xml image/vnd.microsoft.icon image/x-icon image/x-win-bitmap text/css text/javascript text/plain text/xml;
   server {
     listen 80 reuseport;
-    listen [::]:80 reuseport;
+    listen [::]:80 reuseport; # delete these lines if ipv6 is unavailable
     return 444;
   }
   server {

@@ -2,7 +2,9 @@ name: test
 on:
   push:
     branches-ignore: [ main ]
-    paths: [ '**.sh' ]
+    paths:
+      - '**.sh'
+      - Dockerfile
   workflow_dispatch:
 jobs:
   test:

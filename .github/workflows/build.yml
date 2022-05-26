@@ -4,7 +4,9 @@ on:
   - cron: '0 * * * *'
   push:
     branches: [ main ]
-    paths: [ '**.sh' ]
+    paths: 
+      - '**.sh'
+      - Dockerfile
   workflow_dispatch:
 jobs:
   build:

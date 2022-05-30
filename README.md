@@ -22,6 +22,10 @@ Download `nginx.deb` package from [releases](https://github.com/ononoki1/nginx/r
 apt install ./nginx.deb
 ```
 
+## Use in another distribution
+
+Fork this repo, enable GitHub Actions, edit `Dockerfile` and change `bookworm` to the one you like (e.g. `bullseye`). Then wait for GitHub Actions to run. After it finishes, you can download from releases.
+
 ## Recommended NGINX config
 
 ```nginx

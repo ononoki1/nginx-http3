@@ -30,15 +30,11 @@ Fork this repo, enable GitHub Actions, edit `Dockerfile` and change `bookworm` t
 
 ```nginx
 http {
-  aio threads;
-  aio_write on;
   brotli on;
   brotli_comp_level 0; # high level compression is simply a waste of cpu
   brotli_types application/atom+xml application/javascript application/json application/rss+xml application/vnd.ms-fontobject application/x-font-opentype application/x-font-truetype application/x-font-ttf application/x-javascript application/xhtml+xml application/xml font/eot font/opentype font/otf font/truetype image/svg+xml image/vnd.microsoft.icon image/x-icon image/x-win-bitmap text/css text/javascript text/plain text/xml;
   client_body_buffer_size 1m; # tweak these buffer sizes as you need
   client_header_buffer_size 4k;
-  client_max_body_size 0;
-  directio 1m;
   etag off;
   fastcgi_buffers 1024 16k;
   fastcgi_buffer_size 64k;
@@ -67,7 +63,7 @@ http {
   server_tokens off;
   ssl_certificate /path/to/cert_plus_intermediate;
   ssl_certificate_key /path/to/key;
-  ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305; # need to use ec cert
+  ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305; # change ECDSA to RSA if you use RSA certificate
   ssl_early_data on;
   ssl_ecdh_curve X25519:P-256;
   ssl_protocols TLSv1.2 TLSv1.3;
@@ -103,9 +99,7 @@ http {
     listen [::]:443 http3;
     server_name example.com;
     root /path/to/static/site;
-    add_header Strict-Transport-Security 'max-age=63072000; includeSubDomains; preload';
-    add_header Alt-Svc 'h3=":443"; ma=2592000';
-    add_header Cache-Control no-cache;
+    add_header Alt-Svc 'h3=":443"; ma=3600';
   }
   server { # example for dynamic site
     listen 443;
@@ -113,10 +107,9 @@ http {
     listen 443 http3;
     listen [::]:443 http3;
     server_name dynamic.example.com;
-    add_header Strict-Transport-Security 'max-age=63072000; includeSubDomains; preload';
-    add_header Alt-Svc 'h3=":443"; ma=2592000';
+    add_header Alt-Svc 'h3=":443"; ma=3600';
     location / {
-      proxy_pass http://127.0.0.1:8888;
+      proxy_pass http://ip:port;
     }
   }
   server { # example for dynamic site with php
@@ -127,16 +120,12 @@ http {
     server_name php.example.com;
     root /path/to/php/site;
     index index.php;
-    add_header Strict-Transport-Security 'max-age=63072000; includeSubDomains; preload';
-    add_header Alt-Svc 'h3=":443"; ma=2592000';
+    add_header Alt-Svc 'h3=":443"; ma=3600';
     location ~ ^.+\.php$ {
       include fastcgi_params;
       fastcgi_param HTTP_PROXY '';
       fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-      fastcgi_pass unix:/run/php/php7.4-fpm.sock;
-    }
-    location ~ \.(gif|ico|jpg|png|svg|js|css|htm|html|mp3|mp4|wav|ogg|avi|ttf|eot|woff|woff2|json)$ {
-      add_header Cache-Control no-cache;
+      fastcgi_pass unix:/path/to/php/sock;
     }
   }
   server {
@@ -145,8 +134,7 @@ http {
     listen 443 http3;
     listen [::]:443 http3;
     server_name www.example.com;
-    add_header Strict-Transport-Security 'max-age=63072000; includeSubDomains; preload';
-    add_header Alt-Svc 'h3=":443"; ma=2592000';
+    add_header Alt-Svc 'h3=":443"; ma=3600';
     return 301 https://example.com$request_uri;
   }
 }

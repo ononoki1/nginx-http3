@@ -16,7 +16,7 @@
 
 ## Usage
 
-Download `nginx.deb` package from [releases](https://github.com/ononoki1/nginx/releases), then install it with the following command.
+Download `nginx.deb` package from [releases](https://github.com/ononoki1/nginx-http3/releases), then install it with the following command.
 
 ```bash
 apt install ./nginx.deb

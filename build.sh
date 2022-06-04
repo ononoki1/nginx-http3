@@ -2,7 +2,7 @@ set -e
 cd /github/home
 echo Install dependencies.
 apt-get update > /dev/null 2>&1
-apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy cmake curl git golang libcurl4-openssl-dev libjemalloc-dev libmaxminddb-dev libmodsecurity-dev libsodium-dev libunwind-dev libzstd-dev mercurial ninja-build rsync wget > /dev/null 2>&1
+apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy cmake curl git golang libcurl4-openssl-dev libjemalloc-dev libmaxminddb-dev libmodsecurity-dev libsodium-dev libunwind-dev mercurial ninja-build rsync wget > /dev/null 2>&1
 wget -qO /etc/apt/trusted.gpg.d/nginx_signing.asc https://nginx.org/keys/nginx_signing.key
 echo deb-src https://nginx.org/packages/mainline/debian bullseye nginx >> /etc/apt/sources.list
 echo -e 'Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900' > /etc/apt/preferences.d/99nginx
@@ -15,7 +15,6 @@ hg clone -b quic https://hg.nginx.org/nginx-quic > /dev/null 2>&1
 rsync -r nginx-quic/ nginx > /dev/null 2>&1
 cd nginx
 curl -s https://raw.githubusercontent.com/kn007/patch/master/Enable_BoringSSL_OCSP.patch | patch -p1 > /dev/null 2>&1
-curl -s https://raw.githubusercontent.com/kn007/patch/master/use_openssl_md5_sha1.patch | patch -p1 > /dev/null 2>&1
 echo Fetch boringssl source code.
 mkdir debian/modules
 cd debian/modules
@@ -37,14 +36,12 @@ cd zlib
 make -f Makefile.in distclean > /dev/null 2>&1
 cd ..
 git clone --recursive https://github.com/google/ngx_brotli > /dev/null 2>&1
-git clone https://github.com/leev/ngx_http_geoip2_module > /dev/null 2>&1
 git clone https://github.com/openresty/headers-more-nginx-module > /dev/null 2>&1
-git clone https://github.com/GetPageSpeed/ngx_security_headers > /dev/null 2>&1
-git clone https://github.com/tokers/zstd-nginx-module > /dev/null 2>&1
+git clone https://github.com/leev/ngx_http_geoip2_module > /dev/null 2>&1
 echo Build nginx.
 cd ..
 sed -i 's/CFLAGS=""/CFLAGS="-fstack-protector-strong -Wno-ignored-qualifiers -Wno-sign-compare"/g' rules
-sed -i 's/--sbin-path=\/usr\/sbin\/nginx/--sbin-path=\/usr\/sbin\/nginx --add-module=$(CURDIR)\/debian\/modules\/ngx_waf --add-module=$(CURDIR)\/debian\/modules\/ngx_brotli --add-module=$(CURDIR)\/debian\/modules\/ngx_http_geoip2_module --add-module=$(CURDIR)\/debian\/modules\/headers-more-nginx-module --add-module=$(CURDIR)\/debian\/modules\/ngx_security_headers --add-module=$(CURDIR)\/debian\/modules\/zstd-nginx-module/g' rules
+sed -i 's/--sbin-path=\/usr\/sbin\/nginx/--sbin-path=\/usr\/sbin\/nginx --add-module=$(CURDIR)\/debian\/modules\/ngx_waf --add-module=$(CURDIR)\/debian\/modules\/ngx_brotli --add-module=$(CURDIR)\/debian\/modules\/headers-more-nginx-module --add-module=$(CURDIR)\/debian\/modules\/ngx_http_geoip2_module/g' rules
 sed -i 's/--with-cc-opt="$(CFLAGS)" --with-ld-opt="$(LDFLAGS)"/--with-http_v3_module --with-stream_quic_module --with-zlib=$(CURDIR)\/debian\/modules\/zlib --with-cc-opt="-I..\/modules\/boringssl\/include $(CFLAGS)" --with-ld-opt="-ljemalloc -L..\/modules\/boringssl\/build\/ssl -L..\/modules\/boringssl\/build\/crypto $(LDFLAGS)"/g' rules
 cd ..
 dpkg-buildpackage -b > /dev/null 2>&1

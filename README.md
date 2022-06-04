@@ -8,11 +8,8 @@
 - WAF support, powered by [ngx_waf](https://github.com/ADD-SP/ngx_waf)
 - Headers More support, powered by [ngx_headers_more](https://github.com/openresty/headers-more-nginx-module)
 - GeoIP2 support, powered by [ngx_http_geoip2_module](https://github.com/leev/ngx_http_geoip2_module)
-- Security Headers support, powered by [ngx_security_headers](https://github.com/GetPageSpeed/ngx_security_headers)
-- Zstandard support, powered by [zstd-nginx-module](https://github.com/tokers/zstd-nginx-module)
 - OCSP stapling support, powered by [this patch](https://github.com/kn007/patch/blob/master/Enable_BoringSSL_OCSP.patch)
 - Use [BoringSSL](https://github.com/google/boringssl), [Cloudflare's zlib](https://github.com/cloudflare/zlib) and [jemalloc](https://github.com/jemalloc/jemalloc)
-- Use OpenSSL's hash functions instead of NGINX's, powered by [this patch](https://github.com/kn007/patch/blob/master/use_openssl_md5_sha1.patch)
 
 ## Usage
 
@@ -30,20 +27,23 @@ Fork this repo, enable GitHub Actions, edit `Dockerfile` and change `bookworm` t
 
 ```nginx
 http {
+  aio threads;
+  aio_write on;
   brotli on;
   brotli_comp_level 0; # high level compression is simply a waste of cpu
   brotli_types application/atom+xml application/javascript application/json application/rss+xml application/vnd.ms-fontobject application/x-font-opentype application/x-font-truetype application/x-font-ttf application/x-javascript application/xhtml+xml application/xml font/eot font/opentype font/otf font/truetype image/svg+xml image/vnd.microsoft.icon image/x-icon image/x-win-bitmap text/css text/javascript text/plain text/xml;
   client_body_buffer_size 1m; # tweak these buffer sizes as you need
   client_header_buffer_size 4k;
+  directio 4m;
   etag off;
   fastcgi_buffers 1024 16k;
   fastcgi_buffer_size 64k;
   fastcgi_busy_buffers_size 128k;
   gzip on;
   gzip_types application/atom+xml application/javascript application/json application/rss+xml application/vnd.ms-fontobject application/x-font-opentype application/x-font-truetype application/x-font-ttf application/x-javascript application/xhtml+xml application/xml font/eot font/opentype font/otf font/truetype image/svg+xml image/vnd.microsoft.icon image/x-icon image/x-win-bitmap text/css text/javascript text/plain text/xml;
-  hide_server_tokens on;
   if_modified_since before;
   large_client_header_buffers 64 8k;
+  more_clear_headers server;
   proxy_buffers 1024 16k;
   proxy_buffer_size 64k;
   proxy_busy_buffers_size 128k;
@@ -72,8 +72,6 @@ http {
   ssl_stapling on;
   ssl_stapling_file /path/to/ocsp; # generate by `openssl ocsp -no_nonce -issuer /path/to/intermediate -cert /path/to/cert -url "$(openssl x509 -in /path/to/cert -noout -ocsp_uri)" -respout /path/to/ocsp`
   tcp_nopush on;
-  zstd on;
-  zstd_types application/atom+xml application/javascript application/json application/rss+xml application/vnd.ms-fontobject application/x-font-opentype application/x-font-truetype application/x-font-ttf application/x-javascript application/xhtml+xml application/xml font/eot font/opentype font/otf font/truetype image/svg+xml image/vnd.microsoft.icon image/x-icon image/x-win-bitmap text/css text/javascript text/plain text/xml;
   server {
     listen 80 reuseport;
     listen [::]:80 reuseport; # delete these lines if ipv6 is unavailable

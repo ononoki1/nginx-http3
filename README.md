@@ -27,6 +27,7 @@ Fork this repo, enable GitHub Actions, edit `Dockerfile` and change `bookworm` t
 
 ```nginx
 http {
+  access_log off;
   aio threads;
   aio_write on;
   brotli on;
@@ -48,7 +49,7 @@ http {
   proxy_buffer_size 64k;
   proxy_busy_buffers_size 128k;
   proxy_http_version 1.1;
-  proxy_set_header Connection $http_connection;
+  proxy_set_header Connection '';
   proxy_set_header Host $host;
   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
   proxy_ssl_protocols TLSv1.3;

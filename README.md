@@ -27,39 +27,14 @@ Fork this repo, enable GitHub Actions, edit `Dockerfile` and change `bookworm` t
 
 ```nginx
 http {
-  access_log off;
-  aio threads;
-  aio_write on;
   brotli on;
-  brotli_comp_level 0; # high level compression is simply a waste of cpu
   brotli_types application/atom+xml application/javascript application/json application/rss+xml application/vnd.ms-fontobject application/x-font-opentype application/x-font-truetype application/x-font-ttf application/x-javascript application/xhtml+xml application/xml font/eot font/opentype font/otf font/truetype image/svg+xml image/vnd.microsoft.icon image/x-icon image/x-win-bitmap text/css text/javascript text/plain text/xml;
-  client_body_buffer_size 1m; # tweak these buffer sizes as you need
-  client_header_buffer_size 4k;
-  directio 1m;
   etag off;
-  fastcgi_buffers 1024 16k;
-  fastcgi_buffer_size 64k;
-  fastcgi_busy_buffers_size 128k;
   gzip on;
   gzip_types application/atom+xml application/javascript application/json application/rss+xml application/vnd.ms-fontobject application/x-font-opentype application/x-font-truetype application/x-font-ttf application/x-javascript application/xhtml+xml application/xml font/eot font/opentype font/otf font/truetype image/svg+xml image/vnd.microsoft.icon image/x-icon image/x-win-bitmap text/css text/javascript text/plain text/xml;
-  if_modified_since before;
-  large_client_header_buffers 64 8k;
   more_clear_headers server;
-  proxy_buffers 1024 16k;
-  proxy_buffer_size 64k;
-  proxy_busy_buffers_size 128k;
-  proxy_http_version 1.1;
-  proxy_set_header Connection '';
-  proxy_set_header Host $host;
-  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-  proxy_ssl_protocols TLSv1.3;
-  proxy_ssl_server_name on;
-  proxy_ssl_trusted_certificate /etc/ssl/certs/ca-certificates.crt;
-  proxy_ssl_verify on;
-  proxy_ssl_verify_depth 2;
   quic_gso on;
   quic_retry on;
-  resolver 127.0.0.1; # change if you don't have local dns
   sendfile on;
   server_tokens off;
   ssl_certificate /path/to/cert_plus_intermediate;

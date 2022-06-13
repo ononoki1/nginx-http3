@@ -42,7 +42,12 @@ echo Build nginx.
 cd ..
 sed -i 's/CFLAGS=""/CFLAGS="-fstack-protector-strong -Wno-ignored-qualifiers -Wno-sign-compare"/g' rules
 sed -i 's/--sbin-path=\/usr\/sbin\/nginx/--sbin-path=\/usr\/sbin\/nginx --add-module=$(CURDIR)\/debian\/modules\/ngx_waf --add-module=$(CURDIR)\/debian\/modules\/ngx_brotli --add-module=$(CURDIR)\/debian\/modules\/headers-more-nginx-module --add-module=$(CURDIR)\/debian\/modules\/ngx_http_geoip2_module/g' rules
-sed -i 's/--with-cc-opt="$(CFLAGS)" --with-ld-opt="$(LDFLAGS)"/--with-http_v3_module --with-stream_quic_module --with-zlib=$(CURDIR)\/debian\/modules\/zlib --with-cc-opt="-I..\/modules\/boringssl\/include $(CFLAGS)" --with-ld-opt="-ljemalloc -L..\/modules\/boringssl\/build\/ssl -L..\/modules\/boringssl\/build\/crypto $(LDFLAGS)"/g' rules
+sed -i 's/--with-cc-opt="$(CFLAGS)" --with-ld-opt="$(LDFLAGS)"/--with-zlib=$(CURDIR)\/debian\/modules\/zlib --with-cc-opt="-I..\/modules\/boringssl\/include $(CFLAGS)" --with-ld-opt="-ljemalloc -L..\/modules\/boringssl\/build\/ssl -L..\/modules\/boringssl\/build\/crypto $(LDFLAGS)"/g' rules
+sed -i 's/--http-uwsgi-temp-path=\/var\/cache\/nginx\/uwsgi_temp --http-scgi-temp-path=\/var\/cache\/nginx\/scgi_temp //g' rules
+sed -i 's/--with-compat //g' rules
+sed -i 's/--with-http_addition_module --with-http_auth_request_module --with-http_dav_module --with-http_flv_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_mp4_module --with-http_random_index_module --with-http_realip_module --with-http_secure_link_module --with-http_slice_module //g' rules
+sed -i 's/--with-http_stub_status_module --with-http_sub_module //g' rules
+sed -i 's/--with-mail --with-mail_ssl_module --with-stream --with-stream_realip_module --with-stream_ssl_module --with-stream_ssl_preread_module/--with-http_v3_module --without-http_access_module --without-http_autoindex_module --without-http_browser_module --without-http_charset_module --without-http_empty_gif_module --without-http_geo_module --without-http_grpc_module --without-http_limit_conn_module --without-http_limit_req_module --without-http_memcached_module --without-http_mirror_module --without-http_referer_module --without-http_split_clients_module --without-http_scgi_module --without-http_ssi_module --without-http_upstream_hash_module --without-http_upstream_ip_hash_module --without-http_upstream_keepalive_module --without-http_upstream_least_conn_module --without-http_upstream_random_module --without-http_upstream_zone_module --without-http_userid_module --without-http_uwsgi_module/g' rules
 cd ..
 dpkg-buildpackage -b > /dev/null 2>&1
 cd ..

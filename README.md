@@ -29,7 +29,6 @@ apt install ./nginx.deb
 - `http_charset_module`
 - `http_empty_gif_module`
 - `http_geo_module`
-- `http_grpc_module`
 - `http_limit_conn_module`
 - `http_limit_req_module`
 - `http_memcached_module`
@@ -51,7 +50,7 @@ apt install ./nginx.deb
 
 Fork this repo, enable GitHub Actions, edit `build.sh` and find the modules you want. Then remove related parameters and wait for GitHub Actions to run. After it finishes, you can download from releases.
 
-For example, if you want to add `http_uwsgi_module`, you need to change `sed -i 's/--http-uwsgi-temp-path=\/var\/cache\/nginx\/uwsgi_temp --http-scgi-temp-path=\/var\/cache\/nginx\/scgi_temp //g' rules` to `sed -i 's/--http-scgi-temp-path=\/var\/cache\/nginx\/scgi_temp //g' rules`, and change `sed -i 's/--with-mail --with-mail_ssl_module --with-stream --with-stream_realip_module --with-stream_ssl_module --with-stream_ssl_preread_module/--with-http_v3_module --without-http_access_module --without-http_autoindex_module --without-http_browser_module --without-http_charset_module --without-http_empty_gif_module --without-http_geo_module --without-http_grpc_module --without-http_limit_conn_module --without-http_limit_req_module --without-http_memcached_module --without-http_mirror_module --without-http_referer_module --without-http_split_clients_module --without-http_scgi_module --without-http_ssi_module --without-http_upstream_hash_module --without-http_upstream_ip_hash_module --without-http_upstream_keepalive_module --without-http_upstream_least_conn_module --without-http_upstream_random_module --without-http_upstream_zone_module --without-http_userid_module --without-http_uwsgi_module/g' rules` to `sed -i 's/--with-mail --with-mail_ssl_module --with-stream --with-stream_realip_module --with-stream_ssl_module --with-stream_ssl_preread_module/--with-http_v3_module --without-http_access_module --without-http_autoindex_module --without-http_browser_module --without-http_charset_module --without-http_empty_gif_module --without-http_geo_module --without-http_grpc_module --without-http_limit_conn_module --without-http_limit_req_module --without-http_memcached_module --without-http_mirror_module --without-http_referer_module --without-http_split_clients_module --without-http_scgi_module --without-http_ssi_module --without-http_upstream_hash_module --without-http_upstream_ip_hash_module --without-http_upstream_keepalive_module --without-http_upstream_least_conn_module --without-http_upstream_random_module --without-http_upstream_zone_module --without-http_userid_module/g' rules`.
+For example, if you want to add `http_uwsgi_module`, you need to change `sed -i 's/--http-uwsgi-temp-path=\/var\/cache\/nginx\/uwsgi_temp --http-scgi-temp-path=\/var\/cache\/nginx\/scgi_temp //g' rules` to `sed -i 's/--http-scgi-temp-path=\/var\/cache\/nginx\/scgi_temp //g' rules`, and change `sed -i 's/--with-mail --with-mail_ssl_module --with-stream --with-stream_realip_module --with-stream_ssl_module --with-stream_ssl_preread_module/--with-http_v3_module --without-http_access_module --without-http_autoindex_module --without-http_browser_module --without-http_charset_module --without-http_empty_gif_module --without-http_geo_module --without-http_limit_conn_module --without-http_limit_req_module --without-http_memcached_module --without-http_mirror_module --without-http_referer_module --without-http_split_clients_module --without-http_scgi_module --without-http_ssi_module --without-http_upstream_hash_module --without-http_upstream_ip_hash_module --without-http_upstream_keepalive_module --without-http_upstream_least_conn_module --without-http_upstream_random_module --without-http_upstream_zone_module --without-http_userid_module --without-http_uwsgi_module/g' rules` to `sed -i 's/--with-mail --with-mail_ssl_module --with-stream --with-stream_realip_module --with-stream_ssl_module --with-stream_ssl_preread_module/--with-http_v3_module --without-http_access_module --without-http_autoindex_module --without-http_browser_module --without-http_charset_module --without-http_empty_gif_module --without-http_geo_module --without-http_limit_conn_module --without-http_limit_req_module --without-http_memcached_module --without-http_mirror_module --without-http_referer_module --without-http_split_clients_module --without-http_scgi_module --without-http_ssi_module --without-http_upstream_hash_module --without-http_upstream_ip_hash_module --without-http_upstream_keepalive_module --without-http_upstream_least_conn_module --without-http_upstream_random_module --without-http_upstream_zone_module --without-http_userid_module/g' rules`.
 
 ## Use in another distribution
 
@@ -98,7 +97,7 @@ http {
     listen 80;
     listen [::]:80;
     server_name example.com dynamic.example.com php.example.com www.example.com;
-    return 301 https://$host$request_uri;
+    return 308 https://$host$request_uri;
   }
   server { # example for static site
     listen 443;
@@ -143,7 +142,7 @@ http {
     listen [::]:443 http3;
     server_name www.example.com;
     add_header Alt-Svc 'h3=":443"; ma=3600';
-    return 301 https://example.com$request_uri;
+    return 308 https://example.com$request_uri;
   }
 }
 ```

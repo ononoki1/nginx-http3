@@ -26,7 +26,7 @@ curl -s https://raw.githubusercontent.com/kn007/patch/master/Enable_BoringSSL_OC
 echo Fetch boringssl source code.
 mkdir debian/modules
 cd debian/modules
-git clone https://github.com/google/boringssl > /dev/null 2>&1
+git clone --depth 1 https://github.com/google/boringssl > /dev/null 2>&1
 echo Build boringssl.
 mkdir boringssl/build
 cd boringssl/build
@@ -34,13 +34,13 @@ cmake -GNinja .. > /dev/null 2>&1
 ninja -j$(nproc) > /dev/null 2>&1
 echo Fetch additional dependencies.
 cd ../..
-git clone https://github.com/cloudflare/zlib > /dev/null 2>&1
+git clone --depth 1 https://github.com/cloudflare/zlib > /dev/null 2>&1
 cd zlib
 make -f Makefile.in distclean > /dev/null 2>&1
 cd ..
-git clone --recursive https://github.com/google/ngx_brotli > /dev/null 2>&1
-git clone https://github.com/openresty/headers-more-nginx-module > /dev/null 2>&1
-git clone https://github.com/leev/ngx_http_geoip2_module > /dev/null 2>&1
+git clone --depth 1 --recursive https://github.com/google/ngx_brotli > /dev/null 2>&1
+git clone --depth 1 https://github.com/openresty/headers-more-nginx-module > /dev/null 2>&1
+git clone --depth 1 https://github.com/leev/ngx_http_geoip2_module > /dev/null 2>&1
 echo Build nginx.
 cd ..
 sed -i 's|CFLAGS=""|CFLAGS="-Wno-ignored-qualifiers"|g' rules

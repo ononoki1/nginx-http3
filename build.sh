@@ -45,7 +45,7 @@ echo Build nginx.
 cd ..
 sed -i 's|CFLAGS=""|CFLAGS="-Wno-ignored-qualifiers"|g' rules
 sed -i 's|--sbin-path=/usr/sbin/nginx|--sbin-path=/usr/sbin/nginx --add-module=$(CURDIR)/debian/modules/ngx_brotli --add-module=$(CURDIR)/debian/modules/headers-more-nginx-module --add-module=$(CURDIR)/debian/modules/ngx_http_geoip2_module|g' rules
-sed -i 's|--with-cc-opt="$(CFLAGS)" --with-ld-opt="$(LDFLAGS)"|--with-zlib=$(CURDIR)/debian/modules/zlib --with-cc-opt="-I../modules/boringssl/include $(CFLAGS)" --with-ld-opt="-ljemalloc -L../modules/boringssl/build/ssl -L../modules/boringssl/build/crypto $(LDFLAGS)"|g' rules
+sed -i 's|--with-cc-opt="$(CFLAGS)" --with-ld-opt="$(LDFLAGS)"|--with-zlib=$(CURDIR)/debian/modules/zlib --with-zlib-opt=-ljemalloc --with-cc-opt="-I../modules/boringssl/include $(CFLAGS)" --with-ld-opt="-ljemalloc -L../modules/boringssl/build/ssl -L../modules/boringssl/build/crypto $(LDFLAGS)"|g' rules
 sed -i 's|--http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp ||g' rules
 sed -i 's|--with-compat ||g' rules
 sed -i 's|--with-http_addition_module --with-http_auth_request_module --with-http_dav_module --with-http_flv_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_mp4_module --with-http_random_index_module --with-http_realip_module --with-http_secure_link_module --with-http_slice_module ||g' rules

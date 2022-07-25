@@ -65,13 +65,19 @@ http {
   aio_write on;
   brotli on;
   brotli_types application/atom+xml application/javascript application/json application/rss+xml application/vnd.ms-fontobject application/x-font-opentype application/x-font-truetype application/x-font-ttf application/x-javascript application/xhtml+xml application/xml font/eot font/opentype font/otf font/truetype image/svg+xml image/vnd.microsoft.icon image/x-icon image/x-win-bitmap text/css text/javascript text/plain text/xml;
+  directio 1m;
   etag off;
   gzip on;
   gzip_comp_level 6;
+  gzip_http_version 1.0;
   gzip_types application/atom+xml application/javascript application/json application/rss+xml application/vnd.ms-fontobject application/x-font-opentype application/x-font-truetype application/x-font-ttf application/x-javascript application/xhtml+xml application/xml font/eot font/opentype font/otf font/truetype image/svg+xml image/vnd.microsoft.icon image/x-icon image/x-win-bitmap text/css text/javascript text/plain text/xml;
-  more_clear_headers server;
+  gzip_vary on;
+  if_modified_since before;
+  msie_padding off;
   quic_gso on;
   quic_retry on;
+  reset_timedout_connection on;
+  resolver 127.0.0.1; # change to your DNS resolver
   sendfile on;
   server_tokens off;
   ssl_certificate /path/to/cert_plus_intermediate;
@@ -110,7 +116,7 @@ http {
     listen [::]:443 http3;
     server_name example.com;
     root /path/to/static/site;
-    add_header Alt-Svc 'h3=":443"; ma=3600';
+    add_header Alt-Svc 'h3=":443"; ma=3600'; # tweak `ma` time as your own need
   }
   server { # example for dynamic site
     listen 443;

@@ -47,15 +47,15 @@ Due to usage of BoringSSL instead of OpenSSL, some directives may not work, e.g.
 - `http_userid_module`
 - `http_uwsgi_module`
 
-## Use in another distribution
-
-Fork this repo, enable GitHub Actions, edit `Dockerfile` and change `bookworm` to the one you like (e.g. `bullseye`). Then wait for GitHub Actions to run. After it finishes, you can download from releases.
-
 ## Add modules back
 
 Fork this repo, enable GitHub Actions, edit `build.sh` and find the modules you want. Then remove related parameters and wait for GitHub Actions to run. After it finishes, you can download from releases.
 
-For example, if you want to add `http_uwsgi_module`, you need to change `sed -i 's|--http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp ||g' rules` to `sed -i 's|--http-scgi-temp-path=/var/cache/nginx/scgi_temp ||g' rules`, and change `sed -i 's|--with-mail --with-mail_ssl_module --with-stream --with-stream_realip_module --with-stream_ssl_module --with-stream_ssl_preread_module|--with-http_v3_module --without-select_module --without-poll_module --without-http_access_module --without-http_autoindex_module --without-http_browser_module --without-http_charset_module --without-http_empty_gif_module --without-http_limit_conn_module --without-http_memcached_module --without-http_mirror_module --without-http_referer_module --without-http_split_clients_module --without-http_scgi_module --without-http_ssi_module --without-http_upstream_hash_module --without-http_upstream_ip_hash_module --without-http_upstream_keepalive_module --without-http_upstream_least_conn_module --without-http_upstream_random_module --without-http_upstream_zone_module --without-http_userid_module --without-http_uwsgi_module|g' rules` to `sed -i 's|--with-mail --with-mail_ssl_module --with-stream --with-stream_realip_module --with-stream_ssl_module --with-stream_ssl_preread_module|--with-http_v3_module --without-select_module --without-poll_module --without-http_access_module --without-http_autoindex_module --without-http_browser_module --without-http_charset_module --without-http_empty_gif_module --without-http_limit_conn_module --without-http_memcached_module --without-http_mirror_module --without-http_referer_module --without-http_split_clients_module --without-http_scgi_module --without-http_ssi_module --without-http_upstream_hash_module --without-http_upstream_ip_hash_module --without-http_upstream_keepalive_module --without-http_upstream_least_conn_module --without-http_upstream_random_module --without-http_upstream_zone_module --without-http_userid_module|g' rules`.
+For example, if you want to add `http_uwsgi_module` back, you need to remove `--http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp` and `--without-http_uwsgi_module` in `build.sh`.
+
+## Use in another distribution
+
+Fork this repo, enable GitHub Actions, edit `Dockerfile` and change `bookworm` to the one you like (e.g. `bullseye`). Then wait for GitHub Actions to run. After it finishes, you can download from releases.
 
 ## Recommended NGINX config
 

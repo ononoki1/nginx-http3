@@ -24,7 +24,7 @@ Due to usage of BoringSSL instead of OpenSSL, some directives may not work, e.g.
 
 ## Removed modules
 
-- All modules that are not built by default, except `http_ssl_module` and `http_v2_module`
+- All modules that are not built by default, except `http_ssl_module`, `http_sub_module` and `http_v2_module`
 - `http_access_module`
 - `http_autoindex_module`
 - `http_browser_module`

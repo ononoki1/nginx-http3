@@ -22,6 +22,8 @@ apt install ./nginx.deb
 
 Due to usage of BoringSSL instead of OpenSSL, some directives may not work, e.g. `ssl_conf_command`. Besides, direct OCSP stapling via `ssl_stapling on; ssl_stapling_verify on;` does not work too. You should use `ssl_stapling on; ssl_stapling_file /path/to/ocsp;`.
 
+If you really need these directives, you should consider [nginx-quictls](https://github.com/ononoki1/nginx-quictls).
+
 ## Removed modules
 
 - All modules that are not built by default, except `http_ssl_module`, `http_sub_module` and `http_v2_module`

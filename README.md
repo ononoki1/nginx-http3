@@ -8,7 +8,6 @@
 - Headers More support, powered by [ngx_headers_more](https://github.com/openresty/headers-more-nginx-module)
 - GeoIP2 support, powered by [ngx_http_geoip2_module](https://github.com/leev/ngx_http_geoip2_module)
 - OCSP stapling support, powered by [this patch](https://github.com/kn007/patch/blob/master/Enable_BoringSSL_OCSP.patch)
-- Use [BoringSSL](https://github.com/google/boringssl), [Cloudflare's zlib](https://github.com/cloudflare/zlib) and [jemalloc](https://github.com/jemalloc/jemalloc)
 - Remove mountains of useless modules to improve performance
 
 ## Usage
@@ -44,14 +43,12 @@ Due to usage of BoringSSL instead of OpenSSL, some directives may not work, e.g.
 - `http_upstream_least_conn_module`
 - `http_upstream_random_module`
 - `http_upstream_zone_module`
-- `http_userid_module`
-- `http_uwsgi_module`
 
 ## Add modules back
 
 Fork this repo, enable GitHub Actions, edit `build.sh` and find the modules you want. Then remove related parameters and wait for GitHub Actions to run. After it finishes, you can download from releases.
 
-For example, if you want to add `http_uwsgi_module` back, you need to remove `--http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp` and `--without-http_uwsgi_module` in `build.sh`.
+For example, if you want to add `http_scgi_module` back, you need to remove `--http-scgi-temp-path=/var/cache/nginx/scgi_temp` and `--without-http_scgi_module` in `build.sh`.
 
 ## Use in another distribution
 
@@ -61,23 +58,15 @@ Fork this repo, enable GitHub Actions, edit `Dockerfile` and change `bookworm` t
 
 ```nginx
 http {
-  aio threads;
-  aio_write on;
   brotli on;
   brotli_types application/atom+xml application/javascript application/json application/rss+xml application/vnd.ms-fontobject application/x-font-opentype application/x-font-truetype application/x-font-ttf application/x-javascript application/xhtml+xml application/xml font/eot font/opentype font/otf font/truetype image/svg+xml image/vnd.microsoft.icon image/x-icon image/x-win-bitmap text/css text/javascript text/plain text/xml;
-  directio 1m;
   etag off;
   gzip on;
   gzip_comp_level 6;
-  gzip_http_version 1.0;
   gzip_types application/atom+xml application/javascript application/json application/rss+xml application/vnd.ms-fontobject application/x-font-opentype application/x-font-truetype application/x-font-ttf application/x-javascript application/xhtml+xml application/xml font/eot font/opentype font/otf font/truetype image/svg+xml image/vnd.microsoft.icon image/x-icon image/x-win-bitmap text/css text/javascript text/plain text/xml;
   gzip_vary on;
-  if_modified_since before;
-  msie_padding off;
   quic_gso on;
   quic_retry on;
-  reset_timedout_connection on;
-  resolver 127.0.0.1; # change to your DNS resolver
   sendfile on;
   server_tokens off;
   ssl_certificate /path/to/cert_plus_intermediate;

@@ -12,9 +12,10 @@
 
 ## Usage
 
-Download `nginx.deb` package from [releases](https://github.com/ononoki1/nginx-http3/releases), then install it with the following command.
+Run following commands.
 
 ```bash
+wget https://github.com/ononoki1/nginx-http3/releases/latest/download/nginx.deb
 apt install ./nginx.deb
 ```
 

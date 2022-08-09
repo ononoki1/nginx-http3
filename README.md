@@ -21,7 +21,7 @@ apt install ./nginx.deb
 
 ## Note
 
-Due to usage of BoringSSL instead of OpenSSL, some directives may not work, e.g. `ssl_conf_command`. Besides, direct OCSP stapling via `ssl_stapling on; ssl_stapling_verify on;` does not work too. You should use `ssl_stapling on; ssl_stapling_file /path/to/ocsp;`.
+Due to usage of BoringSSL instead of OpenSSL, some directives may not work, e.g. `ssl_conf_command`. Besides, direct OCSP stapling via `ssl_stapling on; ssl_stapling_verify on;` does not work too. You should use `ssl_stapling on; ssl_stapling_file /path/to/ocsp;`. The OCSP file can be generated via `openssl ocsp -no_nonce -issuer /path/to/intermediate -cert /path/to/cert -url "$(openssl x509 -in /path/to/cert -noout -ocsp_uri)" -respout /path/to/ocsp`.
 
 If you really need these directives, you should consider [nginx-quictls](https://github.com/ononoki1/nginx-quictls).
 
@@ -63,15 +63,12 @@ Fork this repo, enable GitHub Actions, edit `Dockerfile` and change `bookworm` t
 http {
   brotli on;
   brotli_types application/atom+xml application/javascript application/json application/rss+xml application/vnd.ms-fontobject application/x-font-opentype application/x-font-truetype application/x-font-ttf application/x-javascript application/xhtml+xml application/xml font/eot font/opentype font/otf font/truetype image/svg+xml image/vnd.microsoft.icon image/x-icon image/x-win-bitmap text/css text/javascript text/plain text/xml;
-  etag off;
   gzip on;
   gzip_comp_level 6;
   gzip_types application/atom+xml application/javascript application/json application/rss+xml application/vnd.ms-fontobject application/x-font-opentype application/x-font-truetype application/x-font-ttf application/x-javascript application/xhtml+xml application/xml font/eot font/opentype font/otf font/truetype image/svg+xml image/vnd.microsoft.icon image/x-icon image/x-win-bitmap text/css text/javascript text/plain text/xml;
   gzip_vary on;
   quic_gso on;
   quic_retry on;
-  sendfile on;
-  server_tokens off;
   ssl_certificate /path/to/cert_plus_intermediate;
   ssl_certificate_key /path/to/key;
   ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305; # change `ECDSA` to `RSA` if you use RSA certificate
@@ -80,9 +77,6 @@ http {
   ssl_protocols TLSv1.2 TLSv1.3;
   ssl_session_cache shared:SSL:10m;
   ssl_session_timeout 1d;
-  ssl_stapling on;
-  ssl_stapling_file /path/to/ocsp; # generate by `openssl ocsp -no_nonce -issuer /path/to/intermediate -cert /path/to/cert -url "$(openssl x509 -in /path/to/cert -noout -ocsp_uri)" -respout /path/to/ocsp`
-  tcp_nopush on;
   server {
     listen 80 reuseport;
     listen [::]:80 reuseport; # delete these lines if ipv6 is unavailable

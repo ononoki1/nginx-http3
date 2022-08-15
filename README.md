@@ -65,7 +65,7 @@ For example, if you want to add `http_scgi_module` back, you need to remove `--h
 
 ## Use in another distribution
 
-Fork this repo, enable GitHub Actions, edit `Dockerfile` and change `bookworm-slim` to the one you like (e.g. `bullseye-slim`). Then wait for GitHub Actions to run. After it finishes, you can download from releases.
+Fork this repo, enable GitHub Actions, edit `Dockerfile` and change `bookworm` to the one you like (e.g. `bullseye`). Then wait for GitHub Actions to run. After it finishes, you can download from releases.
 
 ## Recommended NGINX config
 

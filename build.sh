@@ -6,7 +6,7 @@ echo Install dependencies.
 apt-get update
 apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential \
 -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy \
-ca-certificates wget
+wget
 wget -qO /etc/apt/trusted.gpg.d/nginx_signing.asc https://nginx.org/keys/nginx_signing.key
 echo -e 'deb https://deb.debian.org/debian bookworm main contrib non-free\ndeb https://deb.debian.org/debian-security bookworm-security main contrib non-free\ndeb https://deb.debian.org/debian bookworm-updates main contrib non-free\ndeb-src https://nginx.org/packages/mainline/debian bullseye nginx' \
 > /etc/apt/sources.list
@@ -17,8 +17,7 @@ apt-get dist-upgrade --allow-change-held-packages --allow-downgrades --allow-rem
 -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy
 apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential \
 -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy \
-cmake curl git golang libmaxminddb-dev mercurial ninja-build rsync zlib1g-dev \
-> /dev/null 2>&1
+apt-utils cmake curl git golang libmaxminddb-dev mercurial ninja-build rsync zlib1g-dev
 apt-get build-dep --allow-change-held-packages --allow-downgrades --allow-remove-essential \
 -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy \
 nginx

@@ -5,9 +5,9 @@ echo -e 'deb https://deb.debian.org/debian bookworm main contrib non-free\ndeb h
 > /etc/apt/sources.list
 cd /github/home
 echo Install dependencies.
-apt-get update > /dev/null 2>&1
+apt-get update
 apt-get dist-upgrade --allow-change-held-packages --allow-downgrades --allow-remove-essential \
--o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy > /dev/null 2>&1
+-o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy
 apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential \
 -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy \
 cmake curl git golang libmaxminddb-dev mercurial ninja-build rsync wget zlib1g-dev \

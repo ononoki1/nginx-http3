@@ -76,7 +76,6 @@ http {
   gzip on;
   gzip_comp_level 6;
   gzip_types application/atom+xml application/javascript application/json application/rss+xml application/vnd.ms-fontobject application/x-font-opentype application/x-font-truetype application/x-font-ttf application/x-javascript application/xhtml+xml application/xml font/eot font/opentype font/otf font/truetype image/svg+xml image/vnd.microsoft.icon image/x-icon image/x-win-bitmap text/css text/javascript text/plain text/xml;
-  gzip_vary on;
   quic_gso on;
   quic_retry on;
   ssl_certificate /path/to/cert_plus_intermediate;

@@ -82,9 +82,9 @@ http {
   quic_retry on;
   ssl_certificate /path/to/cert_plus_intermediate;
   ssl_certificate_key /path/to/key;
-  ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305; # change `ECDSA` to `RSA` if you use RSA certificate
+  ssl_ciphers ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-RSA-AES128-GCM-SHA256; # change `RSA` to `ECDSA` if you use EC certificate
   ssl_early_data on;
-  ssl_ecdh_curve X25519:P-256:P-384;
+  ssl_ecdh_curve X25519:P-384;
   ssl_protocols TLSv1.2 TLSv1.3;
   ssl_session_cache shared:SSL:10m;
   ssl_session_timeout 1d;

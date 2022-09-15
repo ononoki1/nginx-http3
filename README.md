@@ -82,14 +82,14 @@ http {
   quic_retry on;
   ssl_certificate /path/to/cert_plus_intermediate;
   ssl_certificate_key /path/to/key;
-  ssl_ciphers ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-RSA-AES128-GCM-SHA256; # change `RSA` to `ECDSA` if you use EC certificate
+  ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305; # change `ECDSA` to `RSA` if you use RSA certificate
   ssl_early_data on;
   ssl_protocols TLSv1.2 TLSv1.3;
   ssl_session_cache shared:SSL:10m;
   ssl_session_timeout 1d;
   server {
     listen 80 reuseport;
-    listen [::]:80 reuseport; # delete these lines if ipv6 is unavailable
+    listen [::]:80 reuseport; # delete if ipv6 is unavailable
     return 444;
   }
   server {
@@ -112,7 +112,7 @@ http {
     listen [::]:443 http3;
     server_name example.com;
     root /path/to/static/site;
-    add_header Alt-Svc 'h3=":443"; ma=3600'; # tweak `ma` time as your own need
+    add_header Alt-Svc 'h3=":443"; ma=86400';
   }
   server { # example for dynamic site
     listen 443;
@@ -120,7 +120,7 @@ http {
     listen 443 http3;
     listen [::]:443 http3;
     server_name dynamic.example.com;
-    add_header Alt-Svc 'h3=":443"; ma=3600';
+    add_header Alt-Svc 'h3=":443"; ma=86400';
     location / {
       proxy_pass http://ip:port;
     }
@@ -133,7 +133,7 @@ http {
     server_name php.example.com;
     root /path/to/php/site;
     index index.php;
-    add_header Alt-Svc 'h3=":443"; ma=3600';
+    add_header Alt-Svc 'h3=":443"; ma=86400';
     location ~ ^.+\.php$ {
       include fastcgi_params;
       fastcgi_param HTTP_PROXY '';
@@ -147,7 +147,7 @@ http {
     listen 443 http3;
     listen [::]:443 http3;
     server_name www.example.com;
-    add_header Alt-Svc 'h3=":443"; ma=3600';
+    add_header Alt-Svc 'h3=":443"; ma=86400';
     return 308 https://example.com$request_uri;
   }
 }

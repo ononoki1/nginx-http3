@@ -20,7 +20,7 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v3.0.0
         with:
-          name: v4.${{ env.minor }}.${{ env.patch }}
+          name: v5.${{ env.minor }}.${{ env.patch }}
           path: /home/runner/work/_temp/_github_home/nginx.deb
       - name: Update
         if: ${{ env.change }}
@@ -33,5 +33,5 @@ jobs:
         with:
           files: /home/runner/work/_temp/_github_home/nginx.deb
           body: "SHA256: ${{ env.hash }}"
-          tag_name: v4.${{ env.minor }}.${{ env.patch }}
+          tag_name: v5.${{ env.minor }}.${{ env.patch }}
           generate_release_notes: false

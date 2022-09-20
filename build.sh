@@ -1,21 +1,20 @@
 set -e
 cd /github/home
 echo Install dependencies.
-apt-get update > /dev/null 2>&1
+apt-get update
 apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential \
 -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy \
-wget > /dev/null 2>&1
+wget
 wget -qO /etc/apt/trusted.gpg.d/nginx_signing.asc https://nginx.org/keys/nginx_signing.key
 echo -e 'Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900' \
 > /etc/apt/preferences.d/99nginx
-apt-get update > /dev/null 2>&1
+apt-get update
 apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential \
 -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy \
-cmake curl git golang libmaxminddb-dev mercurial ninja-build rsync zlib1g-dev \
-> /dev/null 2>&1
+cmake curl git golang libmaxminddb-dev mercurial ninja-build rsync zlib1g-dev
 apt-get build-dep --allow-change-held-packages --allow-downgrades --allow-remove-essential \
 -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy \
-nginx > /dev/null 2>&1
+nginx
 echo Fetch nginx and nginx-quic source code.
 apt-get source nginx > /dev/null 2>&1
 mv nginx-* nginx

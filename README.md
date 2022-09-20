@@ -65,9 +65,9 @@ For example, if you want to add `http_scgi_module` back, you need to remove `--h
 
 ## Use in another distribution
 
-Fork this repo, enable GitHub Actions, edit `Dockerfile` and `build.sh`, and change `bookworm` to the one you like. Then wait for GitHub Actions to run. After it finishes, you can download from releases.
+Fork this repo, enable GitHub Actions, edit `Dockerfile` and `build.sh`, and change `bullseye-slim` to the one you like. Then wait for GitHub Actions to run. After it finishes, you can download from releases.
 
-For example, if you want to use in Debian bullseye, you need to update all occurrence of `bookworm` to `bullseye` in `Dockerfile` and `build.sh`.
+For example, if you want to use in Debian bookworm, you need to change `bullseye-slim` to `bookworm-slim` in `Dockerfile`.
 
 ## Recommended NGINX config
 

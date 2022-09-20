@@ -7,7 +7,7 @@ apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-e
 wget > /dev/null 2>&1
 wget -qO /etc/apt/trusted.gpg.d/nginx_signing.asc https://nginx.org/keys/nginx_signing.key
 echo deb-src https://nginx.org/packages/mainline/debian bullseye nginx \
-> /etc/apt/sources.list
+>> /etc/apt/sources.list
 echo -e 'Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900' \
 > /etc/apt/preferences.d/99nginx
 apt-get update > /dev/null 2>&1

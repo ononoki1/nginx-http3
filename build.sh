@@ -1,7 +1,7 @@
 set -e
 cd /github/home
 echo Install dependencies.
-echo deb https://deb.debian.org/debian bullseye-backports main >> /etc/apt/sources.list
+echo deb http://deb.debian.org/debian bullseye-backports main >> /etc/apt/sources.list
 apt-get update
 apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential \
 -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy \

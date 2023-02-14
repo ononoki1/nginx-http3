@@ -69,6 +69,8 @@ Fork this repo, enable GitHub Actions, edit `Dockerfile` and `build.sh`, and cha
 
 For example, if you want to use in Debian bookworm, you need to change `bullseye-slim` to `bookworm-slim` in `Dockerfile`.
 
+Note: if you are using newer version of Debian (e.g. Debian bookworm or unstable), you can simply use releases from this repo as Debian is backward compatible.
+
 ## Recommended NGINX config
 
 ```nginx

@@ -80,6 +80,7 @@ http {
   gzip on;
   gzip_comp_level 6;
   gzip_types application/atom+xml application/javascript application/json application/rss+xml application/vnd.ms-fontobject application/x-font-opentype application/x-font-truetype application/x-font-ttf application/x-javascript application/xhtml+xml application/xml font/eot font/opentype font/otf font/truetype image/svg+xml image/vnd.microsoft.icon image/x-icon image/x-win-bitmap text/css text/javascript text/plain text/xml;
+  http3 on;
   quic_gso on;
   quic_retry on;
   ssl_certificate /path/to/cert_plus_intermediate;
@@ -97,8 +98,8 @@ http {
   server {
     listen 443 reuseport ssl http2;
     listen [::]:443 reuseport ssl http2;
-    listen 443 reuseport http3;
-    listen [::]:443 reuseport http3;
+    listen 443 reuseport quic;
+    listen [::]:443 reuseport quic;
     ssl_reject_handshake on;
   }
   server {
@@ -110,8 +111,8 @@ http {
   server { # example for static site
     listen 443;
     listen [::]:443;
-    listen 443 http3;
-    listen [::]:443 http3;
+    listen 443 quic;
+    listen [::]:443 quic;
     server_name example.com;
     root /path/to/static/site;
     add_header Alt-Svc 'h3=":443"; ma=86400';
@@ -119,8 +120,8 @@ http {
   server { # example for dynamic site
     listen 443;
     listen [::]:443;
-    listen 443 http3;
-    listen [::]:443 http3;
+    listen 443 quic;
+    listen [::]:443 quic;
     server_name dynamic.example.com;
     add_header Alt-Svc 'h3=":443"; ma=86400';
     location / {
@@ -130,8 +131,8 @@ http {
   server { # example for dynamic site with php
     listen 443;
     listen [::]:443;
-    listen 443 http3;
-    listen [::]:443 http3;
+    listen 443 quic;
+    listen [::]:443 quic;
     server_name php.example.com;
     root /path/to/php/site;
     index index.php;
@@ -146,8 +147,8 @@ http {
   server {
     listen 443;
     listen [::]:443;
-    listen 443 http3;
-    listen [::]:443 http3;
+    listen 443 quic;
+    listen [::]:443 quic;
     server_name www.example.com;
     add_header Alt-Svc 'h3=":443"; ma=86400';
     return 308 https://example.com$request_uri;

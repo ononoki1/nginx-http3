@@ -25,12 +25,12 @@ mv nginx-* nginx
 hg clone -b quic https://hg.nginx.org/nginx-quic > /dev/null 2>&1
 rsync -r nginx-quic/ nginx > /dev/null 2>&1
 cd nginx
-curl -s https://raw.githubusercontent.com/kn007/patch/master/Enable_BoringSSL_OCSP.patch \
+curl -sL https://raw.githubusercontent.com/kn007/patch/master/Enable_BoringSSL_OCSP.patch \
 | patch -p1 > /dev/null 2>&1
 echo Fetch boringssl source code.
 mkdir debian/modules
 cd debian/modules
-git clone --depth 1 https://github.com/google/boringssl > /dev/null 2>&1
+git clone --depth 1 --recursive https://github.com/google/boringssl > /dev/null 2>&1
 echo Build boringssl.
 mkdir boringssl/build
 cd boringssl/build
@@ -39,8 +39,8 @@ ninja -j$(nproc) > /dev/null 2>&1
 echo Fetch additional dependencies.
 cd ../..
 git clone --depth 1 --recursive https://github.com/google/ngx_brotli > /dev/null 2>&1
-git clone --depth 1 https://github.com/leev/ngx_http_geoip2_module > /dev/null 2>&1
-git clone --depth 1 https://github.com/openresty/headers-more-nginx-module > /dev/null 2>&1
+git clone --depth 1 --recursive https://github.com/leev/ngx_http_geoip2_module > /dev/null 2>&1
+git clone --depth 1 --recursive https://github.com/openresty/headers-more-nginx-module > /dev/null 2>&1
 echo Build nginx.
 cd ..
 sed -i 's|NGINX Packaging <nginx-packaging@f5.com>|ononoki <me@ononoki.org>|g' control

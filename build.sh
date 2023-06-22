@@ -5,8 +5,7 @@ echo deb http://deb.debian.org/debian bullseye-backports main >> /etc/apt/source
 apt-get update > /dev/null 2>&1
 apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential \
 -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy \
-cmake curl git libmaxminddb-dev mercurial ninja-build rsync wget zlib1g-dev \
-> /dev/null 2>&1
+cmake curl git libmaxminddb-dev ninja-build wget zlib1g-dev > /dev/null 2>&1
 apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential \
 -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy \
 -t bullseye-backports golang > /dev/null 2>&1
@@ -19,12 +18,9 @@ apt-get update > /dev/null 2>&1
 apt-get build-dep --allow-change-held-packages --allow-downgrades --allow-remove-essential \
 -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy \
 nginx > /dev/null 2>&1
-echo Fetch nginx and nginx-quic source code.
+echo Fetch NGINX source code.
 apt-get source nginx > /dev/null 2>&1
-mv nginx-* nginx
-hg clone -b quic https://hg.nginx.org/nginx-quic > /dev/null 2>&1
-rsync -r nginx-quic/ nginx > /dev/null 2>&1
-cd nginx
+cd nginx-*
 curl -sL https://raw.githubusercontent.com/kn007/patch/master/Enable_BoringSSL_OCSP.patch \
 | patch -p1 > /dev/null 2>&1
 echo Fetch boringssl source code.

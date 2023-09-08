@@ -5,7 +5,7 @@ echo deb http://deb.debian.org/debian bullseye-backports main >> /etc/apt/source
 apt-get update > /dev/null 2>&1
 apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential \
 -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy \
-cmake curl git libmaxminddb-dev ninja-build wget zlib1g-dev > /dev/null 2>&1
+cmake curl git libmaxminddb-dev ninja-build wget zlib1g-dev libgd3 libgd-dev > /dev/null 2>&1
 apt-get install --allow-change-held-packages --allow-downgrades --allow-remove-essential \
 -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -fy \
 -t bullseye-backports golang > /dev/null 2>&1

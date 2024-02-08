@@ -77,6 +77,7 @@ Note: if you are using newer version of Debian (e.g. Debian bookworm or unstable
 http {
   brotli on;
   gzip on;
+  http2 on;
   http3 on;
   quic_gso on;
   quic_retry on;
@@ -93,8 +94,8 @@ http {
     return 444;
   }
   server {
-    listen 443 reuseport ssl http2;
-    listen [::]:443 reuseport ssl http2;
+    listen 443 reuseport ssl;
+    listen [::]:443 reuseport ssl;
     listen 443 reuseport quic;
     listen [::]:443 reuseport quic;
     ssl_reject_handshake on;

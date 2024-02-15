@@ -37,7 +37,7 @@ If you really need these directives, you should consider [nginx-quictls](https:/
 
 ## Removed modules
 
-- All modules that are not built by default, except `http_ssl_module` and `http_v2_module`
+- All modules that are not built by default, except `http_ssl_module`, `http_v2_module` and `http_v3_module`
 - `http_access_module`
 - `http_autoindex_module`
 - `http_browser_module`

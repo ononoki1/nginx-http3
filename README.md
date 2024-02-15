@@ -1,5 +1,9 @@
 # nginx-http3
 
+## Distribution switch notice
+
+According to [Debian Wiki](https://wiki.debian.org/DebianReleases), Debian bullseye will reach its end-of-life date in July 2024. Therefore, the project will switch to Debian bookworm as the packaging environment in June 2024.
+
 ## Table of Contents
 
 - [Features](#features)

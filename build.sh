@@ -46,6 +46,8 @@ git clone --depth 1 --recursive https://github.com/openresty/headers-more-nginx-
 echo Build nginx.
 cd ..
 sed -i 's|NGINX Packaging <nginx-packaging@f5.com>|ononoki <me@ononoki.org>|g' control
+cat rules
+exit 1
 sed -i 's|CFLAGS=""|CFLAGS="-Wno-ignored-qualifiers"|g' rules
 sed -i 's|--sbin-path=/usr/sbin/nginx|--sbin-path=/usr/sbin/nginx --add-module=$(CURDIR)/debian/modules/ngx_brotli --add-module=$(CURDIR)/debian/modules/ngx_http_geoip2_module --add-module=$(CURDIR)/debian/modules/headers-more-nginx-module|g' rules
 sed -i 's|--with-cc-opt="$(CFLAGS)" --with-ld-opt="$(LDFLAGS)"|--with-cc-opt="-I../modules/boringssl/include $(CFLAGS)" --with-ld-opt="-L../modules/boringssl/build/ssl -L../modules/boringssl/build/crypto $(LDFLAGS)"|g' rules

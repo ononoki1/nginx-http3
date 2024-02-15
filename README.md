@@ -37,7 +37,7 @@ If you really need these directives, you should consider [nginx-quictls](https:/
 
 ## Removed modules
 
-- All modules that are not built by default, except `http_ssl_module`, `http_sub_module` and `http_v2_module`
+- All modules that are not built by default, except `http_ssl_module` and `http_v2_module`
 - `http_access_module`
 - `http_autoindex_module`
 - `http_browser_module`
@@ -65,9 +65,9 @@ For example, if you want to add `http_scgi_module` back, you need to remove `--h
 
 ## Use in another distribution
 
-Fork this repo, enable GitHub Actions, edit `Dockerfile` and `build.sh`, and change `bullseye-slim` to the one you like. Then wait for GitHub Actions to run. After it finishes, you can download from releases.
+Fork this repo, enable GitHub Actions, edit `Dockerfile` and `build.sh`, and change `bullseye` to the one you like. Then wait for GitHub Actions to run. After it finishes, you can download from releases.
 
-For example, if you want to use in Debian bookworm, you need to change `bullseye-slim` to `bookworm-slim` in `Dockerfile`.
+For example, if you want to use in Debian buster, you need to change `bullseye` to `buster`.
 
 Note: if you are using newer version of Debian (e.g. Debian bookworm or unstable), you can simply use releases from this repo as Debian is backward compatible.
 

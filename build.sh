@@ -35,6 +35,8 @@ git clone --depth 1 --recursive https://github.com/openresty/headers-more-nginx-
 echo Build nginx.
 cd ..
 sed -i 's|NGINX Packaging <nginx-packaging@f5.com>|ononoki <me@ononoki.org>|g' control
+sed -i 's|export DEB_CFLAGS_MAINT_APPEND=.*|export DEB_CFLAGS_MAINT_APPEND=|g' rules
+sed -i 's|export DEB_LDFLAGS_MAINT_APPEND=.*|export DEB_LDFLAGS_MAINT_APPEND=|g' rules
 sed -i 's|CFLAGS=""|CFLAGS="-Wno-error"|g' rules
 sed -i 's|--sbin-path=/usr/sbin/nginx|--sbin-path=/usr/sbin/nginx --add-module=$(CURDIR)/debian/modules/ngx_brotli --add-module=$(CURDIR)/debian/modules/ngx_http_geoip2_module --add-module=$(CURDIR)/debian/modules/headers-more-nginx-module|g' rules
 sed -i 's|--http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=nginx --group=nginx|--user=www-data --group=www-data|g' rules

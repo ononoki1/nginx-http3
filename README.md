@@ -8,7 +8,6 @@ According to [Debian Wiki](https://wiki.debian.org/DebianReleases), Debian bulls
 
 - [Features](#features)
 - [Usage](#usage)
-- [Note](#note)
 - [Removed modules](#removed-modules)
 - [Add modules back](#add-modules-back)
 - [Use in another distribution](#use-in-another-distribution)
@@ -21,7 +20,6 @@ According to [Debian Wiki](https://wiki.debian.org/DebianReleases), Debian bulls
 - Brotli support, powered by [ngx_brotli](https://github.com/google/ngx_brotli)
 - GeoIP2 support, powered by [ngx_http_geoip2_module](https://github.com/leev/ngx_http_geoip2_module)
 - Headers More support, powered by [ngx_headers_more](https://github.com/openresty/headers-more-nginx-module)
-- OCSP stapling support, powered by [this patch](https://github.com/kn007/patch/blob/master/Enable_BoringSSL_OCSP.patch)
 - Remove mountains of useless modules to improve performance
 
 ## Usage
@@ -32,12 +30,6 @@ Run following commands.
 wget https://github.com/ononoki1/nginx-http3/releases/latest/download/nginx.deb
 sudo apt install ./nginx.deb
 ```
-
-## Note
-
-Due to usage of BoringSSL instead of OpenSSL, some directives may not work, e.g. `ssl_conf_command`. Besides, direct OCSP stapling via `ssl_stapling on; ssl_stapling_verify on;` does not work too. You should use `ssl_stapling on; ssl_stapling_file /path/to/ocsp;`. The OCSP file can be generated via `openssl ocsp -no_nonce -issuer /path/to/intermediate -cert /path/to/cert -url "$(openssl x509 -in /path/to/cert -noout -ocsp_uri)" -respout /path/to/ocsp`.
-
-If you really need these directives, you should consider [nginx-quictls](https://github.com/ononoki1/nginx-quictls).
 
 ## Removed modules
 
@@ -92,6 +84,8 @@ http {
   ssl_protocols TLSv1.2 TLSv1.3;
   ssl_session_cache shared:SSL:10m;
   ssl_session_timeout 1d;
+  ssl_stapling on;
+  ssl_stapling_verify on;
   server {
     listen 80 reuseport;
     listen [::]:80 reuseport; # delete if ipv6 is unavailable

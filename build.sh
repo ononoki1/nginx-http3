@@ -21,7 +21,6 @@ cd nginx-*
 mkdir debian/modules
 cd debian/modules
 echo Fetch additional dependencies.
-cd ../..
 git clone --depth 1 --recursive https://github.com/google/ngx_brotli > /dev/null 2>&1
 mkdir ngx_brotli/deps/brotli/out
 cd ngx_brotli/deps/brotli/out

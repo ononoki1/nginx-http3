@@ -16,7 +16,7 @@ According to [Debian Wiki](https://wiki.debian.org/DebianReleases), Debian bulls
 ## Features
 
 - Based on latest [NGINX](https://hg.nginx.org/nginx) mainline version
-- HTTP/3 and QUIC support
+- HTTP/3 and QUIC support, powered by [quictls](https://github.com/quictls/openssl)
 - Brotli support, powered by [ngx_brotli](https://github.com/google/ngx_brotli)
 - GeoIP2 support, powered by [ngx_http_geoip2_module](https://github.com/leev/ngx_http_geoip2_module)
 - Headers More support, powered by [ngx_headers_more](https://github.com/openresty/headers-more-nginx-module)

@@ -4,6 +4,8 @@
 
 According to [Debian Wiki](https://wiki.debian.org/DebianReleases), Debian bullseye will reach its end-of-life date in July 2024. Therefore, the project will switch to Debian bookworm as the packaging environment in June 2024.
 
+**Update:** already switched on June 25th.
+
 ## Table of Contents
 
 - [Features](#features)
@@ -61,11 +63,11 @@ For example, if you want to add `http_scgi_module` back, you need to remove `--h
 
 ## Use in another distribution
 
-Fork this repo, enable GitHub Actions, edit `Dockerfile` and `build.sh`, and change `bullseye` to the one you like. Then wait for GitHub Actions to run. After it finishes, you can download from releases.
+Fork this repo, enable GitHub Actions, edit `Dockerfile` and `build.sh`, and change `bookworm` to the one you like. Then wait for GitHub Actions to run. After it finishes, you can download from releases.
 
-For example, if you want to use in Debian buster, you need to change `bullseye` to `buster`.
+For example, if you want to use in Debian bullseye, you need to change `bookworm` to `bullseye`.
 
-Note: if you are using newer version of Debian (e.g. Debian bookworm or unstable), you can simply use releases from this repo as Debian is backward compatible.
+Note: if you are using newer version of Debian (e.g. Debian trixie or unstable), you can still use releases for Debian bookworm as Debian is backward compatible.
 
 ## Recommended NGINX config
 

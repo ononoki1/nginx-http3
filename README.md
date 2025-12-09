@@ -74,20 +74,20 @@ Note: if you are using newer version of Debian (e.g. Debian trixie or unstable),
 ```nginx
 http {
   brotli on;
+  brotli_comp_level 6;
   gzip on;
+  gzip_comp_level 6;
   http2 on;
   http3 on;
-  quic_gso on;
-  quic_retry on;
   ssl_certificate /path/to/cert_plus_intermediate;
   ssl_certificate_key /path/to/key;
   ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305; # change `ECDSA` to `RSA` if you use RSA certificate
-  ssl_early_data on;
   ssl_protocols TLSv1.2 TLSv1.3;
-  ssl_session_cache shared:SSL:10m;
+  ssl_session_cache shared:TLS:10m;
   ssl_session_timeout 1d;
   ssl_stapling on;
   ssl_stapling_verify on;
+  ssl_trusted_certificate /etc/ssl/certs/ca-certificates.crt;
   server {
     listen 80 reuseport;
     listen [::]:80 reuseport; # delete if ipv6 is unavailable
@@ -113,7 +113,7 @@ http {
     listen [::]:443 quic;
     server_name example.com;
     root /path/to/static/site;
-    add_header Alt-Svc 'h3=":443"; ma=86400';
+    add_header Alt-Svc 'h3=":443"; ma=2592000' always;
   }
   server { # example for dynamic site
     listen 443;
@@ -121,7 +121,7 @@ http {
     listen 443 quic;
     listen [::]:443 quic;
     server_name dynamic.example.com;
-    add_header Alt-Svc 'h3=":443"; ma=86400';
+    add_header Alt-Svc 'h3=":443"; ma=2592000' always;
     location / {
       proxy_pass http://ip:port;
     }
@@ -134,7 +134,7 @@ http {
     server_name php.example.com;
     root /path/to/php/site;
     index index.php;
-    add_header Alt-Svc 'h3=":443"; ma=86400';
+    add_header Alt-Svc 'h3=":443"; ma=2592000' always;
     location ~ ^.+\.php$ {
       include fastcgi_params;
       fastcgi_param HTTP_PROXY '';
@@ -148,7 +148,7 @@ http {
     listen 443 quic;
     listen [::]:443 quic;
     server_name www.example.com;
-    add_header Alt-Svc 'h3=":443"; ma=86400';
+    add_header Alt-Svc 'h3=":443"; ma=2592000' always;
     return 308 https://example.com$request_uri;
   }
 }
